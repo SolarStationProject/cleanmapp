@@ -128,16 +128,6 @@ cleanmap/
 
 ---
 
-## 👥 Equipo
-
-| Nombre | Rol | Responsabilidades |
-|--------|-----|-------------------|
-| William Martínez | Líder/Scrum Master | HU005, HU014, HU015, HU017 |
-| Christopher Jaime | Desarrollador | HU004, HU009, HU019, HU020 |
-| Martín Saguer | Desarrollador | HU008, HU013, HU018 |
-| Julián Escobar | Desarrollador | HU010, HU012, HU021, HU023 |
-| Alex Parraguez | Desarrollador | HU006, HU007, HU011, HU022 |
-| Stefani Terrevoli | QA/Analista | HU001, HU002, HU003, HU016 |
 
 ---
 
