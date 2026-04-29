@@ -85,7 +85,7 @@ git add .
 git commit -m "feat: descripción de lo que hiciste"
 
 # 5. Subir tu rama
-git push origin feature/nombre-de-tu-funcionalidad
+git push origin feature/HU001-registro-usuario
 
 # 6. Abrir Pull Request en GitHub para revisión
 ```
