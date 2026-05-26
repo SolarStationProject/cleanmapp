@@ -4,6 +4,8 @@ import helmet from 'helmet';
 //import morgan from 'morgan';
 import dotenv from 'dotenv';
 
+import './config/database';
+
 // 1. Cargar variables de entorno
 dotenv.config();
 
