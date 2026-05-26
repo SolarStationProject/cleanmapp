@@ -33,3 +33,5 @@ server.listen(PORT, () => {
 });
 
 export default server;
+
+//Desde /backend en la terminal, usar: npx ts-node src/server.ts
