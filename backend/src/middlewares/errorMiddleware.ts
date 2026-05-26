@@ -4,7 +4,7 @@ export const errorHandler = (
     err: Error, 
     req: Request, 
     res: Response, 
-    next: NextFunction
+    _next: NextFunction //Se usa el "_" para declararlo y evitar "se declara, pero no se usa"
 ): void => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
     
