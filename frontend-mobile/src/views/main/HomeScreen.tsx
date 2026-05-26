@@ -60,7 +60,7 @@ export default function HomeScreen() {
                     <span className="text-xl">🏠</span>
                     <span className="text-[10px] font-medium mt-0.5">Inicio</span>
                 </button>
-                <button onClick={() => navigate('/mapa')} className="flex flex-col items-center text-slate-400 active:text-white">
+                <button onClick={() => navigate('/map')} className="flex flex-col items-center text-slate-400 active:text-white">
                     <span className="text-xl">🗺️</span>
                     <span className="text-[10px] font-medium mt-0.5">Mapa</span>
                 </button>
