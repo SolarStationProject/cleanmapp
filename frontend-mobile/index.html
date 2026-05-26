@@ -1,59 +1,51 @@
 <!DOCTYPE html>
 <html lang="es" class="h-full bg-slate-50 selection:bg-indigo-500 selection:text-white">
-  <head>
-    <meta charset="UTF-8" />
-    
-    <!-- 1. BLOQUEO DE ZOOM MÓVIL: Evita que la pantalla se deforme al dar dos toques rápidos o pellizcar -->
-    <meta 
-      name="viewport" 
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" 
-    />
-    
-    <!-- 2. OPTIMIZACIÓN WEB APP: Configura el comportamiento nativo en iOS y Android -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="format-detection" content="telephone=no" />
-    
-    <title>CleanMap Mobile</title>
+    <head>
+        <meta charset="UTF-8" />
+        <!-- 1. BLOQUEO DE ZOOM MÓVIL: Evita que la pantalla se deforme al dar dos toques rápidos o pellizcar -->
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" 
+        />
+        <!-- 2. OPTIMIZACIÓN WEB APP: Configura el comportamiento nativo en iOS y Android -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="format-detection" content="telephone=no" />
+        <title>CleanMap Mobile</title>
+        <!-- 3. ESTILOS NATIVOS CRÍTICOS: Trucos visuales para simular una App Real -->
+        <style>
+            /* Evita el destello azul feo al pulsar botones en Android/iOS */
+            * {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                box-sizing: border-box;
+            }
 
-    <!-- 3. ESTILOS NATIVOS CRÍTICOS: Trucos visuales para simular una App Real -->
-    <style>
-      /* Evita el destello azul feo al pulsar botones en Android/iOS */
-      * {
-        -webkit-tap-highlight-color: transparent;
-        -webkit-touch-callout: none;
-        box-sizing: border-box;
-      }
+            /* Desactiva el scroll elástico de rebote en los extremos de la pantalla (Efecto Web) */
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                position: fixed;
+                /* Fija el contenedor principal para evitar desplazamientos raros */
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            }
 
-      /* Desactiva el scroll elástico de rebote en los extremos de la pantalla (Efecto Web) */
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        position: fixed; /* Fija el contenedor principal para evitar desplazamientos raros */
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      }
-
-      /* Permite el scroll normal únicamente dentro de los elementos que tú decidas */
-      .scrollable-content {
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-    </style>
-  </head>
-  
-  <body class="h-full w-full text-slate-800 antialiased overscroll-none">
-    
-    <!-- 4. CONTENEDOR PRINCIPAL DE REACT: Aquí se inyecta toda tu app -->
-    <div id="root" class="h-full w-full flex flex-col overflow-hidden"></div>
-    
-    <!-- 5. PUNTO DE ENTRADA JAVASCRIPT: Ruta exacta a tu archivo principal -->
-    <script type="module" src="/src/main.tsx"></script>
-    
-  </body>
+            /* Permite el scroll normal únicamente dentro de los elementos que tú decidas */
+            .scrollable-content {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        </style>
+    </head>
+    <body class="h-full w-full text-slate-800 antialiased overscroll-none">
+        <!-- 4. CONTENEDOR PRINCIPAL DE REACT: Aquí se inyecta toda tu app -->
+        <div id="root" class="h-full w-full flex flex-col overflow-hidden"></div>
+        <!-- 5. PUNTO DE ENTRADA JAVASCRIPT: Ruta exacta a tu archivo principal -->
+        <script type="module" src="/src/main.tsx"></script>
+    </body>
 </html>
-
 
 <!-- Al levantar el cliente (npm run dev), se levanta en entorno web -->
