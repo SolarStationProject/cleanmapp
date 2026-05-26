@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-//import AppRoutes from './app/routes/AppRoutes';
+import AppRoutes from './app/routes/AppRoutes';
 //import './index.css'; // Asegura que cargue Tailwind CSS
 
 const rootElement = document.getElementById('root');
@@ -14,7 +14,7 @@ if (!rootElement) {
 createRoot(rootElement).render(
     <StrictMode>
         <BrowserRouter>
-            {/*<AppRoutes />*/}
+            <AppRoutes/>
         </BrowserRouter>
     </StrictMode>
 );

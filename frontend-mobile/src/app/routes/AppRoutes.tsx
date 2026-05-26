@@ -3,44 +3,43 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 //import { TrackingProvider } from '../providers/TrackingProvider';
 
 // Importación ficticia de tus pantallas (ajusta las rutas a tus archivos reales)
-/*
-import LoginScreen from '../../../views/auth/LoginScreen';
-import RegisterScreen from '../../../views/auth/RegisterScreen';
-import HomeScreen from '../../../views/main/HomeScreen';
-import MapScreen from '../../../views/main/MapScreen';
-import ProfileScreen from '../../../views/main/ProfileScreen';
-*/
+import SplashScreen from '../../views/auth/SplashScreen';
+//import LoginScreen from '../../views/auth/LoginScreen';
+//import RegisterScreen from '../../views/auth/RegisterScreen';
+import HomeScreen from '../../views/main/HomeScreen';
+import MapScreen from '../../views/main/MapScreen';
+//import ProfileScreen from '../../views/main/ProfileScreen';
 
 export default function AppRoutes() {
     return (
         //<AuthProvider>
             <Routes>
                 {/* === RUTAS PÚBLICAS (AUTENTICACIÓN) === */}
+                <Route path="/" element={<SplashScreen/>} />
                 {/*<Route path="/login" element={<LoginScreen />} />*/}
                 {/*<Route path="/register" element={<RegisterScreen />} />*/}
 
                 {/* === RUTAS PRIVADAS (REQUIEREN INTEGRACIÓN O LOGIN) === */}
                 {/* Envolvemos el mapa y el home en el TrackingProvider para activar el GPS de Capacitor */}
-                {/*
-                <Route path="/" element={
-                    <TrackingProvider>
+                
+                <Route path="/home" element={
+                    //<TrackingProvider>
                         <HomeScreen />
-                    </TrackingProvider>
+                    //</TrackingProvider>
                 } />
-                */}
-                {/*
-                <Route path="/mapa" element={
-                    <TrackingProvider>
+                
+                <Route path="/map" element={
+                    //<TrackingProvider>
                         <MapScreen />
-                    </TrackingProvider>
+                    //</TrackingProvider>
                 } />
-                */}
+
                 {/*
                 <Route path="/perfil" element={<ProfileScreen />} />
                 */}
                 {/* === REDIRECCIÓN POR DEFECTO === */}
                 {/* Si el usuario escribe cualquier cosa rara, lo manda al Home o Login */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
         //</AuthProvider>
     );
