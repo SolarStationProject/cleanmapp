@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import MyReportsList from '../../components/users/MyReportsList';
+import { MyReportsList } from '../../components/users/MyReportsList';
 
 export default function HomeScreen() {
     const navigate = useNavigate();
