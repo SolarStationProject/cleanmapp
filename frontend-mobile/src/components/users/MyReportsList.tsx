@@ -8,7 +8,7 @@ export const MyReportsList: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        api.get<ApiResponse<Reporte[]>>('/reports/mis-reportes')
+        api.get<ApiResponse<Reporte[]>>('/api/reports/mis-reportes')
             .then(response => {
                 if (response.data.success) {
                     setReportes(response.data.data);

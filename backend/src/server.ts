@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
-//import morgan from 'morgan';
 import dotenv from 'dotenv';
+
+//Importación de rutas
+import reportsRoutes from './modules/reports/reports.routes' //reportsRoutes es un alias de la ruta
 
 //Importación de middlewares modularizados
 import { errorHandler, globalMiddlewares } from './middlewares';
@@ -18,12 +20,9 @@ const server: Application = express();
 globalMiddlewares(server);
 
 // Enrutamiento Principal (Conexión con tus módulos de negocio)
-// TODO: Importar tus rutas reales desde ./modules/auth/auth.routes y ./modules/reports/reports.routes
-// Ejemplo de cómo conectarías tus módulos reales:
-// server.use('/api/auth', authRoutes);
-// server.use('/api/reports', reportsRoutes);
+server.use('/api/reports', reportsRoutes)
 
-// Middleware de manejo de errores global (Debe ir AL FINAL de las rutas)
+
 // Middleware modularizado de errores (Siempre al final de las rutas)
 server.use(errorHandler);
 

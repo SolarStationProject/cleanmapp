@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import * as reportsService from './reports.service';
 
-export async function getPropios(_req: Request, res: Response) {
+export async function getReportesPropios(req: Request, res: Response) {
     try {
-        // 🚨 TEMPORAL: Usamos un ID fijo para que no falle por falta de token
-        const ciudadanoId = '12345'; 
+        // Buscamos el ID real. Si no existe (porque no hay token), será 'undefined'
+        const ciudadanoId = (req as any).user?.id;  
 
-        const reportes = await reportsService.getPropios(ciudadanoId);
+        // Si hay ID, busca en la DB. Si NO hay ID, le damos un arreglo vacío [] al instante sin tocar la base de datos.
+        const reportes = ciudadanoId 
+            ? await reportsService.getReportesPropios(ciudadanoId) 
+            : [];
 
         // Respondemos al frontend con éxito
         return res.status(200).json({
@@ -15,7 +18,7 @@ export async function getPropios(_req: Request, res: Response) {
         });
 
     } catch (error) {
-        console.error('Error en getPropios:', error);
+        console.error('Error en getReportesPropios:', error);
         return res.status(500).json({ 
             success: false, 
             message: 'Error interno en el servidor de reportes' 
