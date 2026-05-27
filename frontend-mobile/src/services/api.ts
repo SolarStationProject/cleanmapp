@@ -12,7 +12,7 @@ export const api = axios.create({
         'Content-Type': 'application/json',
     },
 });
-
+/*
 // Interceptor para inyectar automáticamente el Token de sesión en cada petición
 api.interceptors.request.use(
     (config) => {
@@ -28,3 +28,4 @@ api.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+*/

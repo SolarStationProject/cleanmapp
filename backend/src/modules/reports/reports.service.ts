@@ -1,15 +1,9 @@
-import { ReportsRepository } from './reports.repository';
+import * as reportsRepository from './reports.repository';
 import { Reporte } from '../../shared/types';
 
-export class ReportsService {
-    private reportsRepository: ReportsRepository;
-
-    constructor() {
-        this.reportsRepository = new ReportsRepository();
-    }
-
-    async getPropios(ciudadanoId: string): Promise<Reporte[]> {
-        // Aquí podrías agregar lógica de negocio (ej: formatear la URL de la imagen si se aloja en S3/Storage)
-        return await this.reportsRepository.findByCiudadanoId(ciudadanoId);
-    }
+// Otra función directa. Sin clases ni "this.repository"
+export async function getPropios(ciudadanoId: string): Promise<Reporte[]> {
+    // Si la DB está vacía, esto simplemente retornará un arreglo vacío []
+    return await reportsRepository.findByCiudadanoId(ciudadanoId);
 }
+

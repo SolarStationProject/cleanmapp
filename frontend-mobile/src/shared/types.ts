@@ -1,5 +1,3 @@
-// frontend-mobile/src/shared/types.ts
-
 export type RolUsuario = 'Admin' | 'Ciudadano';
 export type EstadoReporte = 'Pendiente' | 'Verificado' | 'Rechazado';
 export type PrioridadReporte = 'Alta' | 'Media' | 'Baja';
