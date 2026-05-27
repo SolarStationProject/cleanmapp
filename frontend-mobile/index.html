@@ -11,40 +11,35 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
         <title>CleanMap Mobile</title>
+        <link rel="stylesheet" href="/frontend-mobile/src/index.css" />
         <!-- 3. ESTILOS NATIVOS CRÍTICOS: Trucos visuales para simular una App Real -->
         <style>
-            /* Evita el destello azul feo al pulsar botones en Android/iOS */
             * {
                 -webkit-tap-highlight-color: transparent;
                 -webkit-touch-callout: none;
                 box-sizing: border-box;
             }
-
-            /* Desactiva el scroll elástico de rebote en los extremos de la pantalla (Efecto Web) */
+        
+            /* Permitimos scroll en el html pero evitamos que la app se mueva hacia los lados */
             html,
             body {
                 margin: 0;
                 padding: 0;
                 width: 100%;
                 height: 100%;
-                overflow: hidden;
-                position: fixed;
-                /* Fija el contenedor principal para evitar desplazamientos raros */
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            }
-
-            /* Permite el scroll normal únicamente dentro de los elementos que tú decidas */
-            .scrollable-content {
+                overflow-x: hidden;
+                /* 👈 Bloquea el scroll horizontal */
                 overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
+                /* 👈 Permite el scroll vertical normal */
+                background-color: #a5a7b1;
+                /* bg-slate-950 */
+                font-family: system-ui, -apple-system, sans-serif;
             }
         </style>
     </head>
-    <body class="h-full w-full text-slate-800 antialiased overscroll-none">
-        <!-- 4. CONTENEDOR PRINCIPAL DE REACT: Aquí se inyecta toda tu app -->
-        <div id="root" class="h-full w-full flex flex-col overflow-hidden"></div>
-        <!-- 5. PUNTO DE ENTRADA JAVASCRIPT: Ruta exacta a tu archivo principal -->
-        <script type="module" src="/src/main.tsx"></script>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="src/main.tsx"></script>
     </body>
 </html>
 
