@@ -1,13 +1,9 @@
-import { Pool, types } from 'pg';
+import { Pool, types, QueryResult } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 // 1. Configuración de PostGIS Type Parsers (GeoJSON Automático)
-// El OID 142 es comúnmente asignado al tipo 'geometry' o 'geography' en PostgreSQL.
-// Al asignarle una función de parseo vacía u objeto, forzamos a que si usamos
-// ST_AsGeoJSON(geom) en el SQL, el driver 'pg' lo entregue directamente como un Objeto de JS 
-// en lugar de un string que requiera JSON.parse().
 const POSTGIS_GEOMETRY_OID = 142;
 types.setTypeParser(POSTGIS_GEOMETRY_OID, (val: string) => {
     try {
@@ -47,15 +43,17 @@ pool.on('error', (err) => {
     console.error('Error inesperado en un cliente inactivo del pool de la BD:', err);
 });
 
-export default {
+// Exportación corregida con Tipado Estricto para TypeScript
+export const db = {
     /**
-     * Ejecuta una consulta SQL genérica en la base de datos.
-     * Utiliza un cliente del pool y lo libera automáticamente tras la ejecución.
+     * Ejecuta una consulta SQL usando async/await y devuelve una Promesa tipada.
      */
-    query: (text: string, params?: any[]) => pool.query(text, params),
-
+    query: (text: string, params?: any[]): Promise<QueryResult> => {
+        return pool.query(text, params);
+    },
+    
     /**
-     * Expone el pool directamente en caso de requerir flujos avanzados o transacciones complejas.
+     * Instancia limpia del pool para transacciones complejas.
      */
     pool,
 };
