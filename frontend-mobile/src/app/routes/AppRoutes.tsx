@@ -3,11 +3,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 //import { TrackingProvider } from '../providers/TrackingProvider';
 
 // Importación ficticia de tus pantallas (ajusta las rutas a tus archivos reales)
-import SplashScreen from '../../views/auth/SplashScreen';
+import SplashScreen from '../../components/screens/auth/SplashScreen';
 //import LoginScreen from '../../views/auth/LoginScreen';
 //import RegisterScreen from '../../views/auth/RegisterScreen';
-import HomeScreen from '../../views/main/HomeScreen';
-import MapScreen from '../../views/main/MapScreen';
+import HomeScreen from '../../components/screens/main/HomeScreen';
+import MapScreen from '../../components/screens/main//MapScreen';
 //import ProfileScreen from '../../views/main/ProfileScreen';
 
 export default function AppRoutes() {

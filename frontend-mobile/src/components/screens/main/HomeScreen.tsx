@@ -1,78 +1,343 @@
-import { useNavigate } from 'react-router-dom';
-import { MyReportsList } from '../../users/MyReportsList';
+//import { useNavigate } from 'react-router-dom';
+//import { MyReportsList } from '../../users/MyReportsList';
 
-export default function HomeScreen() {
-    const navigate = useNavigate();
+// Importamos el diccionario de imágenes que ya tienes en tu estructura
+import { IMAGES } from "../../../assets/images"; 
+import { ICONS } from "../../../assets/icons"
+import { useState } from "react";
+import TabBar from "../../ui/TabBar"; 
+
+interface HomeScreenProps {
+    onNavigate?: (screen: string) => void;
+}
+
+export default function HomeScreen({ onNavigate }: HomeScreenProps) {
+    // Estado para saber qué pestaña de la barra inferior está iluminada (por defecto 'home')
+    const [activeTab, setActiveTab] = useState<string>("home");
+
+    // Función que maneja el cambio de pestaña tanto en los botones como en la barra inferior
+    const handleTabChange = (tabId: string) => {
+        setActiveTab(tabId);
+        onNavigate?.(tabId); // Dispara la navegación hacia el enrutador global
+    };
+    
+    const menuItems = [
+        {
+            id: "new-report",
+            icon: ICONS.Plus,
+            label: "Nuevo Reporte",
+            description: "Reportar vertedero ilegal",
+            accent: true,
+        },
+        {
+            id: "my-reports",
+            icon: ICONS.FileText,
+            label: "Mis Reportes",
+            description: "Ver estado de tus reportes",
+            badge: 3,
+        },
+        {
+            id: "map",
+            icon: ICONS.MapPin,
+            label: "Mapa de Reportes",
+            description: "Explorar reportes cercanos",
+        },
+        {
+            id: "notifications",
+            icon: ICONS.Bell,
+            label: "Notificaciones",
+            description: "Alertas y actualizaciones",
+            badge: 2,
+        },
+    ];
 
     return (
-        /* 
-          1. CAMBIO RADICAL: Quitamos "fixed" y controlamos el tamaño con Viewport Height (h-screen)
-          Esto rompe el bug de WebNative al no pelear con los bordes absolutos del contenedor del simulador.
-        */
-        <div className="w-full h-screen flex flex-col bg-slate-950 text-slate-100 overflow-hidden">
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            backgroundColor: '#f8fafc',
+            userSelect: 'none',
+            fontFamily: 'system-ui, -apple-system, sans-serif'
+        }}>
+
+            {/* Header Verde Oscuro Institucional */}
+            <div style={{
+                backgroundColor: '#005c2e',
+                padding: '20px 16px 32px 16px',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginTop: '20px',
+                    marginBottom: '20px'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{
+                            width: '48px',
+                            height: '48px',
+                            borderRadius: '16px',
+                            backgroundColor: '#ffffff',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '4px',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
+                        }}>
+                            <img
+                                src={IMAGES.logo}
+                                alt="Cleanmapp"
+                                style={{ width: '180%', height: '180%', objectFit: 'contain' }}
+                            />
+                        </div>
+                        <div>
+                            <h1 style={{ fontSize: '20px', fontWeight: '700', color: '#ffffff', margin: 0 }}>Cleanmap</h1>
+                            <p style={{ fontSize: '16px', color: '#a7f3d0', opacity: 0.8, margin: 0 }}>Ciudad más limpia</p>
+                        </div>
+                    </div>
+
+                    {/* Campana de Notificación con Punto de Alerta */}
+                    <button style={{
+                        position: 'relative',
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        border: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ffffff',
+                        cursor: 'pointer'
+                    }}>
+                        <ICONS.Bell />
+                        <span style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            width: '8px',
+                            height: '8px',
+                            backgroundColor: '#ef4444',
+                            borderRadius: '50%'
+                        }} />
+                    </button>
+                </div>
+
+                {/* Banner de Bienvenida */}
+                <div style={{
+                    backgroundColor: 'lab(44 -35.92 17)',
+                    borderRadius: '24px',
+                    padding: '16px',
+                    border: '1px solid rgba(16,185,129,0.1)'
+                }}>
+                    <p style={{ fontSize: '16px', color: 'lab(98.84% .0000298023 -.0000119209)', opacity: 0.7, fontWeight: '400', margin: 0 }}>Bienvenido,</p>
+                    <p style={{ fontSize: '20px', fontWeight: '700', color: '#ffffff', marginTop: '2px', margin: 0 }}>Juan García</p>
+                </div>
+            </div>
+
+            {/* Bloque Flotante de Contadores */}
+            <div style={{ padding: '0 16px', marginTop: '-20px' }}>
+                <div style={{
+                    backgroundColor: '#ffffff',
+                    borderRadius: '24px',
+                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
+                    border: '1px solid #f1f5f9',
+                    padding: '16px'
+                }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', textAlign: 'center' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#005c2e', margin: 0 }}>5</p>
+                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>Reportes</p>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', borderLeft: '1px solid #f1f5f9', borderRight: '1px solid #f1f5f9' }}>
+                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', margin: 0 }}>3</p>
+                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>Resueltos</p>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#0284c7', margin: 0 }}>2</p>
+                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>En proceso</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            {/* Cabecera Móvil - Fija en el tope */}
-            <header className="w-full px-6 pt-6 pb-4 border-b border-slate-900 shrink-0 bg-slate-950/80 backdrop-blur">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs text-slate-400">¡Hola, Ciudadano!</p>
-                        <h2 className="text-lg font-bold text-white">Dashboard CleanMap</h2>
-                    </div>
-                    <div className="h-9 w-9 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">
-                        U
+            {/* Listado Principal de Acciones de la Calle con Scroll */}
+            <div style={{
+                flex: 1,
+                padding: '20px 16px 24px 16px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+            }}>
+                <p style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#64748b',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    margin: '0 0 4px 4px'
+                }}>
+                    Acciones principales
+                </p>
+
+                {menuItems.map((item) => (
+                    <button
+                        key={item.id}
+                        onClick={() => onNavigate?.(item.id)}
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '16px',
+                            padding: '16px',
+                            borderRadius: '24px',
+                            border: 'none',
+                            textAlign: 'left',
+                            minHeight: '72px',
+                            cursor: 'pointer',
+                            backgroundColor: item.accent ? '#005c2e' : '#f4f7f5',
+                            color: item.accent ? '#ffffff' : '#1e293b',
+                            boxShadow: item.accent ? '0 4px 6px -1px rgba(0,92,46,0.1)' : 'none'
+                        }}
+                    >
+                        {/* Contenedor del Icono Redondeado */}
+                        <div style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            backgroundColor: item.accent ? 'rgba(255,255,255,0.15)' : '#ffffff',
+                            color: item.accent ? '#ffffff' : '#005c2e',
+                            border: item.accent ? 'none' : '1px solid #f1f5f9'
+                        }}>
+                            <item.icon />
+                        </div>
+
+                        {/* Textos Informativos */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                color: item.accent ? '#ffffff' : '#1e293b',
+                                margin: 0
+                            }}>
+                                {item.label}
+                            </p>
+                            <p style={{
+                                fontSize: '14px',
+                                marginTop: '2px',
+                                margin: 0,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                color: item.accent ? '#a7f3d0' : '#94a3b8'
+                            }}>
+                                {item.description}
+                            </p>
+                        </div>
+
+                        {/* Globo de Notificaciones / Badges */}
+                        {item.badge && (
+                            <span style={{
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                fontSize: '14px',
+                                fontWeight: '700',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                backgroundColor: item.accent ? '#ffffff' : '#005c2e',
+                                color: item.accent ? '#005c2e' : '#ffffff'
+                            }}>
+                                {item.badge}
+                            </span>
+                        )}
+
+                        {/* Flecha derecha */}
+                        <ICONS.ChevronRight />
+                    </button>
+                ))}
+
+                {/* Sección de Actividad Reciente */}
+                <div style={{ paddingTop: '8px', paddingBottom: '80px' }}>
+                    <p style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#64748b',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        margin: '0 0 12px 4px'
+                    }}>
+                        Actividad reciente
+                    </p>
+                    <div style={{
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #f1f5f9',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                        borderRadius: '24px',
+                        padding: '16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '16px'
+                    }}>
+                        {/* Evento En Proceso */}
+                        <div style={{ display: 'flex', alignItems: 'start', gap: '12px' }}>
+                            <div style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                backgroundColor: '#f0f9ff',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                border: '1px solid #e0f2fe',
+                                color: '#0284c7'
+                            }}>
+                                <ICONS.Clock />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{ fontSize: '16px', fontWeight: '700', color: '#334155', margin: 0 }}>Reporte #2847 actualizado</p>
+                                <p style={{ fontSize: '14px', color: '#64748b', marginTop: '2px', margin: 0 }}>Estado: <span style={{ color: '#0284c7', fontWeight: '600' }}>En proceso</span></p>
+                                <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px', margin: 0 }}>Hace 2 horas</p>
+                            </div>
+                        </div>
+                        
+                        {/* Evento Resuelto */}
+                        <div style={{ display: 'flex', alignItems: 'start', gap: '12px', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
+                            <div style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                backgroundColor: '#ecfdf5',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                                border: '1px solid #d1fae5',
+                                color: '#10b981'
+                            }}>
+                                <ICONS.FileText />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{ fontSize: '16px', fontWeight: '700', color: '#334155', margin: 0 }}>Reporte #2801 resuelto</p>
+                                <p style={{ fontSize: '14px', color: '#64748b', marginTop: '2px', margin: 0 }}>Limpieza completada con éxito</p>
+                                <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px', margin: 0 }}>Ayer</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </header>
-
-            {/* 
-              2. EL MOTOR DE ESCAPE TÁCTIL: 
-              Usamos "h-[calc(100vh-8rem)]" para obligar al contenedor central a medir exactamente 
-              el tamaño del celular menos la cabecera y el menú. Esto NO PUEDE fallar.
-            */}
-            <main className="w-full h-[calc(100vh-8rem)] overflow-y-scroll px-6 py-4 space-y-6 pb-32">
-
-                {/* Tarjetas de Resumen */}
-                <div className="grid grid-cols-2 gap-4 shrink-0">
-                    <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-                        <span className="text-2xl">⚠️</span>
-                        <p className="text-xs text-slate-400 mt-2">Mis Reportes</p>
-                        <p className="text-xl font-bold text-white">4 Activos</p>
-                    </div>
-                    <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800">
-                        <span className="text-2xl">✨</span>
-                        <p className="text-xs text-slate-400 mt-2">Zonas Limpias</p>
-                        <p className="text-xl font-bold text-emerald-400">+12 esta semana</p>
-                    </div>
-                </div>
-
-                {/* Botón de Acción Principal Móvil */}
-                <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/10 active:scale-[0.97] transition-all flex items-center justify-center gap-3 text-base shrink-0">
-                    <span className="text-xl">📸</span> Reportar Microbasural
-                </button>
-
-                {/* Actividad Reciente / Tu Listado */}
-                <div className="space-y-3 pb-6">
-                    <h3 className="text-sm font-semibold text-slate-300">Mis Reportes Recientes</h3>
-                    <MyReportsList />
-                </div>
-            </main>
-
-            {/* 3. MENÚ INFERIOR FIJO: Pegado al fondo usando z-index alto para evitar bugs de WebNative */}
-            <nav className="w-full h-16 bg-slate-900/95 backdrop-blur border-t border-slate-800 flex items-center justify-around px-6 shrink-0 z-50">
-                <button className="flex flex-col items-center text-emerald-400">
-                    <span className="text-xl">🏠</span>
-                    <span className="text-[10px] font-medium mt-0.5">Inicio</span>
-                </button>
-                <button onClick={() => navigate('/map')} className="flex flex-col items-center text-slate-400 active:text-white">
-                    <span className="text-xl">🗺️</span>
-                    <span className="text-[10px] font-medium mt-0.5">Mapa</span>
-                </button>
-                <button onClick={() => navigate('/perfil')} className="flex flex-col items-center text-slate-400 active:text-white">
-                    <span className="text-xl">👤</span>
-                    <span className="text-[10px] font-medium mt-0.5">Perfil</span>
-                </button>
-            </nav>
+                <TabBar currentTab={activeTab} onTabChange={handleTabChange} />
+            </div>
         </div>
     );
 }
-
