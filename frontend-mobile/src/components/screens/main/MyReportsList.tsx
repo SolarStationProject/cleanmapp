@@ -1,6 +1,7 @@
 //import React, { useEffect, useState } from 'react';
 //import { api } from '../../services/api';
 //import { Reporte, ApiResponse } from '../../shared/types';
+import { useNavigate } from 'react-router-dom';
 import { ICONS } from "../../../assets/icons"
 import TabBar from "../../ui/TabBar"; // Reutilizamos tu barra inferior fija
 
@@ -14,7 +15,7 @@ interface ReportItem {
 }
 
 export default function MyReportsList() {
-
+    const navigate = useNavigate();
 
     // Datos idénticos a los que tienes en tu captura de pantalla
     const reports: ReportItem[] = [
@@ -44,8 +45,6 @@ export default function MyReportsList() {
         }
     ];
 
-// frontend-mobile/src/components/citizen/MyReportsList.tsx (PARTE 2 DE 2)
-
     // Función auxiliar para pintar las etiquetas de estado idénticas a la captura
     const getStatusStyle = (status: 'Pendiente' | 'En proceso' | 'Resuelto') => {
         switch (status) {
@@ -72,7 +71,7 @@ export default function MyReportsList() {
             {/* Cabecera Fija Verde Institucional */}
             <div style={{
                 backgroundColor: '#005c2e',
-                padding: '20px 16px 20px 16px',
+                padding: '42px 16px 20px 16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'between',
@@ -82,6 +81,7 @@ export default function MyReportsList() {
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
                     {/* Botón de retroceso */}
                     <button
+                        onClick={() => navigate('/home')}
                         style={{
                             background: 'none',
                             border: 'none',
@@ -101,21 +101,25 @@ export default function MyReportsList() {
                     {/* Alerta de notificación */}
                     <button style={{
                         position: 'relative',
-                        background: 'none',
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '50%',
+                        //backgroundColor: 'rgba(255,255,255,0.1)',
+                        backgroundColor: '#005c2e',
                         border: 'none',
-                        color: '#ffffff',
-                        cursor: 'pointer',
-                        padding: '4px',
                         display: 'flex',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ffffff',
+                        cursor: 'pointer'
                     }}>
                         <ICONS.Bell />
                         <span style={{
                             position: 'absolute',
-                            top: '4px',
-                            right: '4px',
-                            width: '6px',
-                            height: '6px',
+                            top: '8px',
+                            right: '8px',
+                            width: '8px',
+                            height: '8px',
                             backgroundColor: '#ef4444',
                             borderRadius: '50%'
                         }} />
@@ -133,20 +137,20 @@ export default function MyReportsList() {
                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
             }}>
                 <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '16px', fontWeight: '800', color: '#1e293b', margin: 0 }}>4</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '2px 0 0 0' }}>Total</p>
+                    <p style={{ fontSize: '18px', fontWeight: '800', color: '#1e293b', margin: 0 }}>3</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Total</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '16px', fontWeight: '800', color: '#d97706', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '2px 0 0 0' }}>Pendientes</p>
+                    <p style={{ fontSize: '18px', fontWeight: '800', color: '#d97706', margin: 0 }}>1</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Pendientes</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '16px', fontWeight: '800', color: '#0284c7', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '2px 0 0 0' }}>En proceso</p>
+                    <p style={{ fontSize: '18px', fontWeight: '800', color: '#0284c7', margin: 0 }}>1</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>En proceso</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <p style={{ fontSize: '16px', fontWeight: '800', color: '#10b981', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '11px', color: '#64748b', margin: '2px 0 0 0' }}>Resueltos</p>
+                    <p style={{ fontSize: '18px', fontWeight: '800', color: '#10b981', margin: 0 }}>1</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Resueltos</p>
                 </div>
             </div>
 
@@ -164,6 +168,7 @@ export default function MyReportsList() {
                     return (
                         <div 
                             key={report.id}
+                            onClick={() => navigate("/report-detail")}
                             style={{
                                 backgroundColor: '#ffffff',
                                 borderRadius: '24px',
@@ -216,9 +221,9 @@ export default function MyReportsList() {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <ICONS.MapPin />
-                                    <span style={{ fontSize: '12px', color: '#64748b' }}>{report.address}</span>
+                                    <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '-6px' }}>{report.address}</span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px'}}>
                                     <ICONS.Calendar />
                                     <span style={{ fontSize: '12px', color: '#64748b' }}>{report.date}</span>
                                 </div>

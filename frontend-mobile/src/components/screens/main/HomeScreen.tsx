@@ -73,7 +73,7 @@ export default function HomeScreen() {
             {/* Header Verde Oscuro Institucional */}
             <div style={{
                 backgroundColor: '#005c2e',
-                padding: '20px 16px 32px 16px',
+                padding: '20px 16px 36px 16px',
                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
             }}>
                 <div style={{
