@@ -30,7 +30,7 @@ export default function TabBar({ currentTab }: TabBarProps) {
         { id: 'home', label: 'Inicio', icon: ICONS.Home },
         { id: 'map', label: 'Mapa', icon: ICONS.Map },
         { id: 'new-report', label: 'Reportar', icon: ICONS.Plus, isCenter: true },
-        { id: 'notifications', label: 'Alertas', icon: ICONS.Bell },
+        { id: 'reports', label: 'Reportes', icon: ICONS.FileText },
         { id: 'profile', label: 'Perfil', icon: ICONS.User },
     ];
 
@@ -40,7 +40,7 @@ export default function TabBar({ currentTab }: TabBarProps) {
             bottom: 0,
             left: 0,
             right: 0,
-            height: '76px',
+            height: 'calc(76px + env(safe-area-inset-bottom, 0px))',
             backgroundColor: '#ffffff',
             borderTopLeftRadius: '24px',
             borderTopRightRadius: '24px',
@@ -51,7 +51,8 @@ export default function TabBar({ currentTab }: TabBarProps) {
             padding: '0 8px',
             zIndex: 1000,
             fontFamily: 'system-ui, -apple-system, sans-serif',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            paddingBottom: 'env(safe-area-inset-bottom, 0px)'
         }}>
             {tabs.map((tab) => {
                 const isActive = currentTab === tab.id;
@@ -118,7 +119,7 @@ export default function TabBar({ currentTab }: TabBarProps) {
                             <tab.icon />
                         </div>
                         <span style={{
-                            fontSize: '11px',
+                            fontSize: '12px',
                             fontWeight: isActive ? '700' : '500',
                             whiteSpace: 'nowrap'
                         }}>

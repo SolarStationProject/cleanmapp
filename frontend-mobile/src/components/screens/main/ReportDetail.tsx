@@ -177,10 +177,12 @@ export default function ReportDetail() {
                 {/* Sección del Historial de Cambios (Línea de Tiempo) */}
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <p style={{
-                        fontSize: '13px',
+                        fontSize: '12px',
                         fontWeight: '700',
-                        color: '#1e293b',
-                        margin: '0 0 16px 4px'
+                        color: '#64748b',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        margin: '0 0 12px 4px'
                     }}>
                         Historial de cambios
                     </p>
@@ -240,7 +242,7 @@ export default function ReportDetail() {
                                         </div>
 
                                         {/* Título de la acción ejecutada */}
-                                        <p style={{ fontSize: '14px', fontWeight: '600', color: '#334155', margin: '0 0 6px 0', lineHeight: '1.4' }}>
+                                        <p style={{ fontSize: '16px', fontWeight: '600', color: '#334155', margin: '0 0 6px 0', lineHeight: '1.3' }}>
                                             {event.title}
                                         </p>
 

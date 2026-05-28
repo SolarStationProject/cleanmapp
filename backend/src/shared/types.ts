@@ -1,54 +1,63 @@
-// Tipos de datos estrictos que coinciden con PostgreSQL de CleanMap
 export type RolUsuario = 'Admin' | 'Ciudadano';
 export type EstadoReporte = 'Pendiente' | 'Verificado' | 'Rechazado';
 export type PrioridadReporte = 'Alta' | 'Media' | 'Baja';
 
-// Interfaz para la tabla usuarios
 export interface Usuario {
-    id: string; // UUID generado por uuid_generate_v4()
+    id: string; // UUID string
     email: string;
-    password?: string; // Opcional para ocultarlo al enviar respuestas HTTP
+    password?: string; 
     rol: RolUsuario;
-    fecha_registro: Date;
+    fecha_registro: string; // Cambiado a string: Express lo serializa como ISO String
 }
 
-// Interfaz para la tabla ubicaciones
 export interface Ubicacion {
     latitud: number;
     longitud: number;
     comuna: string;
 }
 
-// Interfaz para la tabla reportes
 export interface Reporte {
-    id: string; // UUID
-    ciudadano_id: string; // Relación con usuarios.id
-    descripcion?: string; // TEXT (puede ser nulo)
-    foto?: string; // VARCHAR(255) (puede ser nulo)
-    fecha_creacion: Date;
+    id: string; 
+    ciudadano_id: string; 
+    descripcion?: string; 
+    foto?: string; 
+    fecha_creacion: string; 
     estado: EstadoReporte;
     prioridad: PrioridadReporte;
-    latitud: number; // Conecta con ubicaciones
-    longitud: number; // Conecta con ubicaciones
+    latitud: number; 
+    longitud: number; 
 }
 
-// Interfaz para la tabla validacion_reportes
 export interface ValidacionReporte {
-    id: string; // UUID
-    reporte_id: string; // Relación con reportes.id
-    usuario_id: string; // Relación con usuarios.id (Admin o Ciudadano)
-    fecha: Date;
-    tipo: string; // Ej: 'Validación ciudadano' o 'Validación admin'
-    comentario?: string;
+    id: string; 
+    reporte_id: string; 
+    usuario_id: string;       // El Admin o moderador que cambia el estado
+    usuario_nombre?: string;  // Opcional: Para el JOIN rápido (ej: 'María García', 'Carlos Méndez')
+    fecha: string;            // ISO String que contiene la fecha y hora (14:30)
+    estado_asignado: EstadoReporte; // El estado que se fijó en ese hito (ej: 'En proceso')
+    comentario: string;       // El texto descriptivo (ej: 'Asignado a equipo de limpieza zona norte')
 }
 
-// Interfaz para la tabla notificaciones
 export interface Notificacion {
-    id: string; // UUID
-    usuario_id: string; // Relación con usuarios.id
+    id: string; 
+    usuario_id: string; 
     mensaje: string;
-    tipo: string; // Ej: 'Email', 'Push'
-    fecha_envio: Date;
+    tipo: string; 
+    fecha_envio: string; // Cambiado a string
     leida: boolean;
+}
+
+// Tabla exclusiva para discusiones o notas de moderación entre Admins
+export interface ComentarioInterno {
+    id: string;          // UUID
+    reporte_id: string;  // Relación con reportes.id
+    admin_id: string;    // Relación con usuarios.id (Solo usuarios con rol 'Admin')
+    comentario: string;  // TEXT
+    fecha_creacion: string; // ISO String
+}
+
+export interface DetalleReporteResponse extends Reporte {
+    historial_cambios: ValidacionReporte[]; // Llena la línea de tiempo (público para todos)
+    comentarios_internos?: ComentarioInterno[]; // Privado (Solo si el solicitante es Admin)
 }
 
