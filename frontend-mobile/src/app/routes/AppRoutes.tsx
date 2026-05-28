@@ -7,6 +7,7 @@ import SplashScreen from '../../components/screens/auth/SplashScreen';
 //import LoginScreen from '../../views/auth/LoginScreen';
 //import RegisterScreen from '../../views/auth/RegisterScreen';
 import HomeScreen from '../../components/screens/main/HomeScreen';
+import MyReportsList from '../../components/screens/main/MyReportsList';
 import MapScreen from '../../components/screens/main//MapScreen';
 //import ProfileScreen from '../../views/main/ProfileScreen';
 
@@ -31,6 +32,12 @@ export default function AppRoutes() {
                 <Route path="/map" element={
                     //<TrackingProvider>
                         <MapScreen />
+                    //</TrackingProvider>
+                } />
+
+                <Route path="/my-reports" element={
+                    //<TrackingProvider>
+                        <MyReportsList />
                     //</TrackingProvider>
                 } />
 

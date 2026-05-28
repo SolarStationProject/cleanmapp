@@ -1,24 +1,33 @@
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 //import { MyReportsList } from '../../users/MyReportsList';
 
 // Importamos el diccionario de imágenes que ya tienes en tu estructura
 import { IMAGES } from "../../../assets/images"; 
 import { ICONS } from "../../../assets/icons"
-import { useState } from "react";
+//import { useState } from "react";
 import TabBar from "../../ui/TabBar"; 
 
-interface HomeScreenProps {
-    onNavigate?: (screen: string) => void;
-}
+export default function HomeScreen() {
+    const navigate = useNavigate(); // Inicializamos la función de navegación
 
-export default function HomeScreen({ onNavigate }: HomeScreenProps) {
-    // Estado para saber qué pestaña de la barra inferior está iluminada (por defecto 'home')
-    const [activeTab, setActiveTab] = useState<string>("home");
-
-    // Función que maneja el cambio de pestaña tanto en los botones como en la barra inferior
+    // Esta función se encarga de redirigir a las URLs oficiales de tu AppRoutes
     const handleTabChange = (tabId: string) => {
-        setActiveTab(tabId);
-        onNavigate?.(tabId); // Dispara la navegación hacia el enrutador global
+        switch (tabId) {
+            case "home":
+                navigate("/home");
+                break;
+            case "my-reports":
+                navigate("/my-reports"); // Te manda directo a la lista que mapeamos
+                break;
+            case "map":
+                navigate("/map"); // Te manda al mapa de reportes
+                break;
+            case "new-report":
+                navigate("/map"); // O la ruta que definas para el formulario
+                break;
+            default:
+                break;
+        }
     };
     
     const menuItems = [
@@ -187,7 +196,7 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
                 {menuItems.map((item) => (
                     <button
                         key={item.id}
-                        onClick={() => onNavigate?.(item.id)}
+                        onClick={() => handleTabChange(item.id)}
                         style={{
                             width: '100%',
                             display: 'flex',
@@ -199,7 +208,7 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
                             textAlign: 'left',
                             minHeight: '72px',
                             cursor: 'pointer',
-                            backgroundColor: item.accent ? '#005c2e' : '#f4f7f5',
+                            backgroundColor: item.accent ? '#005c2e' : '#e7ede8',
                             color: item.accent ? '#ffffff' : '#1e293b',
                             boxShadow: item.accent ? '0 4px 6px -1px rgba(0,92,46,0.1)' : 'none'
                         }}
@@ -213,8 +222,8 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
-                            backgroundColor: item.accent ? 'rgba(255,255,255,0.15)' : '#ffffff',
-                            color: item.accent ? '#ffffff' : '#005c2e',
+                            backgroundColor: item.accent ? 'lab(44 -35.92 17)' : '#d0e0d6',
+                            color: item.accent ? '#d0e0d6' : '#005c2e',
                             border: item.accent ? 'none' : '1px solid #f1f5f9'
                         }}>
                             <item.icon />
@@ -243,13 +252,13 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
                             </p>
                         </div>
 
-                        {/* Globo de Notificaciones / Badges */}
+                        {/* Globo de números de Notificaciones / Badges */}
                         {item.badge && (
                             <span style={{
                                 width: '20px',
                                 height: '20px',
                                 borderRadius: '50%',
-                                fontSize: '14px',
+                                fontSize: '15px',
                                 fontWeight: '700',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -336,8 +345,9 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
                         </div>
                     </div>
                 </div>
-                <TabBar currentTab={activeTab} onTabChange={handleTabChange} />
             </div>
+            {/* Barra Inferior Fija Fuera del Scroll */}
+            <TabBar currentTab="home"/>
         </div>
     );
 }
