@@ -4,6 +4,7 @@ export type PrioridadReporte = 'Alta' | 'Media' | 'Baja';
 
 export interface Usuario {
     id: string; 
+    name: string
     email: string;
     rol: RolUsuario;
     fecha_registro: string; 

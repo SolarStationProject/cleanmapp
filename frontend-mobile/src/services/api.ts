@@ -3,7 +3,8 @@ import axios from 'axios';
 // En desarrollo con emuladores/celulares reales:
 // - Si usas emulador de Android, 'localhost' no funciona, debes usar 'http://10.0.2'
 // - Si pruebas en dispositivo físico, usa la IP privada de tu PC (ej: 'http://1.xx')
-const API_URL = 'http://localhost:3000';
+//const API_URL = 'http://localhost:3000'; local
+const API_URL = 'http://192.168.1.6:8100/'; // teléfono
 
 export const api = axios.create({
     baseURL: API_URL,

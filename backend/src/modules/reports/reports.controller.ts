@@ -25,4 +25,3 @@ export async function getReportesPropios(req: Request, res: Response) {
         });
     }
 }
-
