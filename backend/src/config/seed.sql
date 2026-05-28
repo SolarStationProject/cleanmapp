@@ -4,11 +4,11 @@ TRUNCATE TABLE comentarios_internos, validacion_reportes, notificaciones, report
 -- 2. INSERTAR USUARIOS DE PRUEBA
 -- Nota: Usamos contraseñas de texto plano solo para desarrollo rápido en local.
 -- Guarda los UUID generados para las relaciones inferiores.
-INSERT INTO usuarios (id, email, password, rol, fecha_registro)
+INSERT INTO usuarios (id, nombre, email, password, rol, fecha_registro)
 VALUES 
-    ('a1111111-1111-1111-1111-111111111111', 'admin@cleanmap.com', 'admin123', 'Admin', NOW()),
-    ('a2222222-2222-2222-2222-222222222222', 'admin2@cleanmap.com', 'admin234', 'Admin', NOW()),
-    ('c2222222-2222-2222-2222-222222222222', 'ciudadano@cleanmap.com', 'user123', 'Ciudadano', NOW());
+    ('a1111111-1111-1111-1111-111111111111', 'María García', 'admin@cleanmap.com', 'admin123', 'Admin', NOW()),
+    ('a2222222-2222-2222-2222-222222222222', 'Carlos Méndez', 'admin2@cleanmap.com', 'admin234', 'Admin', NOW()),
+    ('c2222222-2222-2222-2222-222222222222', 'Juan García', 'ciudadano@cleanmap.com', 'user123', 'Ciudadano', NOW());
 
 -- 3. INSERTAR REPORTES DE PRUEBA (Utilizando ST_SetSRID y ST_MakePoint)
 -- IMPORTANTE: El orden en ST_MakePoint es estricto (Longitud, Latitud)

@@ -1,6 +1,7 @@
 import { db } from '../../config/database';
 import { Reporte, DetalleReporteResponse, ValidacionReporte } from '../../shared/types';
 
+// Obtiene los detalles de los reportes de un usuario específico
 export async function findByCiudadanoId(ciudadanoId: string): Promise<Reporte[]> {
     const queryText = `
         SELECT id, ciudadano_id, descripcion, foto, fecha_creacion, estado, prioridad, latitud, longitud 
@@ -56,7 +57,7 @@ export async function findDetailsByReporteId(reporteId: string): Promise<Detalle
                         'id', v.id,
                         'reporte_id', v.reporte_id,
                         'usuario_id', v.usuario_id,
-                        'usuario_nombre', u.email,
+                        'usuario_nombre', u.nombre,
                         'fecha', v.fecha::text,
                         'estado_asignado', v.estado_asignado,
                         'comentario', v.comentario
