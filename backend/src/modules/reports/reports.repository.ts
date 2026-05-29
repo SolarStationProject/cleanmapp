@@ -22,11 +22,13 @@ export async function findByOwnReportesId(ciudadanoId: string): Promise<Reporte[
         SELECT 
             id,
             ciudadano_id,
+            codigo,
             descripcion,
             foto,
             fecha_creacion::text as fecha_creacion,
             estado,
-            prioridad,
+            direccion,
+            comuna,
             ST_Y(geom) as latitud, -- Extrae latitud desde PostGIS
             ST_X(geom) as longitud -- Extrae longitud desde PostGIS
         FROM reportes
@@ -45,11 +47,13 @@ export async function findDetailsByReporteId(reporteId: string): Promise<Detalle
         SELECT 
             r.id,
             r.ciudadano_id,
+            r.codigo,
             r.descripcion,
             r.foto,
             r.fecha_creacion::text as fecha_creacion,
             r.estado,
-            r.prioridad,
+            r.direccion,
+            r.comuna,
             ST_Y(r.geom) as latitud,
             ST_X(r.geom) as longitud,
             

@@ -23,11 +23,13 @@ CREATE TABLE usuarios (
 CREATE TABLE reportes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     ciudadano_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    codigo VARCHAR(50) NOT NULL,
     descripcion TEXT,
     foto TEXT, -- Cambiado a TEXT para que soporte los strings Base64 pesados de la cámara
     fecha_creacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     estado VARCHAR(50) NOT NULL DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente', 'Verificado', 'Rechazado')),
-    prioridad VARCHAR(50) NOT NULL DEFAULT 'Media' CHECK (prioridad IN ('Alta', 'Media', 'Baja')),
+    direccion VARCHAR(255) NOT NULL,
+    comuna VARCHAR(100) NOT NULL,
     geom geometry(Point, 4326) NOT NULL -- Almacena latitud/longitud en formato geográfico global WGS84
 );
 

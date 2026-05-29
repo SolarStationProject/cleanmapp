@@ -277,7 +277,7 @@ export default function HomeScreen() {
                 ))}
 
                 {/* Sección de Actividad Reciente */}
-                <div style={{ paddingTop: '8px', paddingBottom: '65px' }}>
+                <div style={{ paddingTop: '8px', paddingBottom: 'calc(64px + env(safe-area-inset-bottom, 0px))' }}>
                     <p style={{
                         fontSize: '12px',
                         fontWeight: '700',

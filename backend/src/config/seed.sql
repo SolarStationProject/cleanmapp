@@ -12,36 +12,42 @@ VALUES
 
 -- 3. INSERTAR REPORTES DE PRUEBA (Utilizando ST_SetSRID y ST_MakePoint)
 -- IMPORTANTE: El orden en ST_MakePoint es estricto (Longitud, Latitud)
-INSERT INTO reportes (id, ciudadano_id, descripcion, foto, fecha_creacion, estado, prioridad, geom)
+INSERT INTO reportes (id, ciudadano_id, codigo, descripcion, foto, fecha_creacion, estado, direccion, comuna, geom)
 VALUES 
     (
         '01111111-1111-1111-1111-111111111111', 
         'c2222222-2222-2222-2222-222222222222', 
+        'REP-2026-0001',
         'Microbasural acumulado en la esquina del parque. Hay restos de poda y plásticos.', 
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...', -- Simulación de Base64 de la cámara
         NOW() - INTERVAL '3 days', 
         'Pendiente', 
-        'Alta', 
+        'Calle Los Pinos 234', --Simulación de calle (activar ubicación en el futuro si es requerido)
+        'San Bernardo', -- Simulación de comuna (activar ubicación en el futuro si es requerido)
         ST_SetSRID(ST_MakePoint(-70.6506, -33.4372), 4326) -- Coordenadas en Santiago, Chile
     ),
     (
         '02222222-2222-2222-2222-222222222222', 
         'c2222222-2222-2222-2222-222222222222', 
+        'REP-2026-0002',
         'Escombros de construcción bloqueando la acera peatonal.', 
         NULL, 
         NOW() - INTERVAL '1 day', 
         'Pendiente', 
-        'Media', 
+        'Av. Central 567', 
+        'Santiago',
         ST_SetSRID(ST_MakePoint(-70.6530, -33.4420), 4326)
     ),
     (
         '03333333-3333-3333-3333-333333333333', 
         'c2222222-2222-2222-2222-222222222222', 
+        'REP-2026-0003',
         'Contenedor municipal desbordado de basura orgánica.', 
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...', 
         NOW() - INTERVAL '5 days', 
         'Verificado', 
-        'Baja', 
+        'Zona Industrial Norte',
+        'San Miguel', 
         ST_SetSRID(ST_MakePoint(-70.6480, -33.4350), 4326)
     );
 

@@ -1,10 +1,9 @@
 export type RolUsuario = 'Admin' | 'Ciudadano';
 export type EstadoReporte = 'Pendiente' | 'Verificado' | 'Rechazado';
-export type PrioridadReporte = 'Alta' | 'Media' | 'Baja';
 
 export interface Usuario {
     id: string; // UUID string
-    name: string;
+    nombre: string;
     email: string;
     password?: string; 
     rol: RolUsuario;
@@ -12,21 +11,20 @@ export interface Usuario {
 }
 
 export interface Ubicacion {
+    comuna: string;
     latitud: number;
     longitud: number;
-    comuna: string;
 }
 
-export interface Reporte {
+export interface Reporte extends Ubicacion {
     id: string; 
     ciudadano_id: string; 
+    codigo: string;
     descripcion?: string; 
     foto?: string; 
     fecha_creacion: string; 
     estado: EstadoReporte;
-    prioridad: PrioridadReporte;
-    latitud: number; 
-    longitud: number; 
+    direccion: string;
 }
 
 export interface ValidacionReporte {
@@ -35,7 +33,7 @@ export interface ValidacionReporte {
     usuario_id: string;       // El Admin o moderador que cambia el estado
     usuario_nombre?: string;  // Opcional: Para el JOIN rápido (ej: 'María García', 'Carlos Méndez')
     fecha: string;            // ISO String que contiene la fecha y hora (14:30)
-    estado_asignado: EstadoReporte; // El estado que se fijó en ese hito (ej: 'En proceso')
+    estado_asignado: EstadoReporte; // El estado que se fijó en ese hito (ej: 'Pendiente')
     comentario: string;       // El texto descriptivo (ej: 'Asignado a equipo de limpieza zona norte')
 }
 

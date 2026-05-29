@@ -1,31 +1,29 @@
 export type RolUsuario = 'Admin' | 'Ciudadano';
 export type EstadoReporte = 'Pendiente' | 'Verificado' | 'Rechazado';
-export type PrioridadReporte = 'Alta' | 'Media' | 'Baja';
 
 export interface Usuario {
     id: string; 
-    name: string
+    nombre: string
     email: string;
     rol: RolUsuario;
     fecha_registro: string; 
 }
 
 export interface Ubicacion {
+    comuna: string;
     latitud: number;
     longitud: number;
-    comuna: string;
 }
 
-export interface Reporte {
+export interface Reporte extends Ubicacion {
     id: string; 
     ciudadano_id: string; 
+    codigo: string;
     descripcion?: string; 
-    foto?: string; // String Base64 limpio
+    foto?: string; 
     fecha_creacion: string; 
     estado: EstadoReporte;
-    prioridad: PrioridadReporte;
-    latitud: number; 
-    longitud: number; 
+    direccion: string;
 }
 
 export interface ValidacionReporte {
@@ -63,7 +61,6 @@ export interface DetalleReporte {
     foto?: string; 
     fecha_creacion: string; 
     estado: EstadoReporte;
-    prioridad: PrioridadReporte;
     latitud: number; 
     longitud: number; 
     historial_cambios: ValidacionReporte[]; // Renderiza el componente visual del Timeline
