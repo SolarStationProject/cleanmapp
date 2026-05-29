@@ -30,15 +30,18 @@ export async function getReportesPropios(req: Request, res: Response) {
 //Obtiene el objeto detallado de un reporte y aplica el filtro de privacidad HU021.
 export async function getDetalleReporte(req: Request, res: Response) {
     try {
-        const { id } = req.params; 
-        const usuarioRol = (req as any).user?.rol; 
+        const { id } = req.query; 
+        const {usuarioRol} = req.query; 
+
+        console.log('valor de id: ',id)
+        console.log('valor de rol: ',usuarioRol)
 
         if (!id) {
             return res.status(400).json({ success: false, message: 'El ID del reporte es requerido.' });
         }
 
         // Llamada directa 1 a 1 al repositorio
-        const detalle = await reportsService.getDetalleReporte(id) as DetalleReporteResponse | null;
+        const detalle = await reportsService.getDetalleReporte(id as string) as DetalleReporteResponse | null;
 
         if (!detalle) {
             return res.status(404).json({ success: false, message: 'Reporte no encontrado.' });

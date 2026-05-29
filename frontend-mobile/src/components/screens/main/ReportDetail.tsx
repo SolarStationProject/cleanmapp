@@ -1,25 +1,39 @@
-//import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ICONS } from "../../../assets/icons"
+import { useAxios } from '../../../hooks/useAxios';
+import { useNavigate, useLocation } from "react-router-dom";
+import { ICONS } from "../../../assets/icons";
+import { DetalleReporteResponse } from '../../../shared/types';
 import TabBar from "../../ui/TabBar";
 
-interface HistoryEvent {
-    id: string;
-    status: 'Pendiente' | 'En proceso' | 'Resuelto';
-    date: string;
-    time: string;
-    title: string;
-    operator?: string;
+// Se define la estructura de la respuesta del backend
+interface BackendResponse {
+    success: boolean;
+    data: DetalleReporteResponse | null;
 }
 
 export default function ReportDetail() {
     const navigate = useNavigate();
+    // Invocamos el hook useLocation
+    const location = useLocation();
 
+    // Definimos un parámetro de prueba (id)
+    const reportId = location.state;
+    const { data: respuesta, loading, error } = useAxios<BackendResponse>(
+        '/api/reports/:id', //endpoint
+        { id:reportId[0], usuarioRol:reportId[1] } //parámetro
+    );
+
+    const detalles_reportes = respuesta?.data; 
+
+    // Renderizado de pantallas de carga y error del GET
+    //if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
+    if (error) return <p>Error al conectar con el servidor: {error}</p>;
+    
     // Datos completos simulados de la liña de tiempo de la captura (Segunda pantalla extendida)
-    const eventHistory: HistoryEvent[] = [
+    /*
+    const eventHistory = [
         {
             id: "e1",
-            status: "En proceso",
+            status: "Verificado",
             date: "18 Mar 2024",
             time: "14:30",
             title: "Asignado a equipo de limpieza zona norte",
@@ -27,7 +41,7 @@ export default function ReportDetail() {
         },
         {
             id: "e2",
-            status: "En proceso",
+            status: "Pendiente",
             date: "16 Mar 2024",
             time: "09:15",
             title: "Reporte verificado en campo",
@@ -41,16 +55,17 @@ export default function ReportDetail() {
             title: "Reporte recibido y registrado",
             operator: "Sistema"
         }
-    ];
+    ] as const;
+    */
 
     // Mapeo preciso de los colores de las etiquetas de estado
-    const getBadgeColors = (status: 'Pendiente' | 'En proceso' | 'Resuelto') => {
+    const getBadgeColors = (status: 'Rechazado' | 'Pendiente' | 'Verificado') => {
         switch (status) {
-            case 'En proceso':
+            case 'Rechazado':
                 return { bg: '#e0f2fe', text: '#0284c7', border: '#bae6fd', dot: '#0284c7' };
             case 'Pendiente':
                 return { bg: '#fef3c7', text: '#d97706', border: '#fde68a', dot: '#d97706' };
-            case 'Resuelto':
+            case 'Verificado':
                 return { bg: '#e6f4ea', text: '#137333', border: '#ceead6', dot: '#137333' };
         }
     };
@@ -188,9 +203,9 @@ export default function ReportDetail() {
                     </p>
 
                     <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                        {eventHistory.map((event, index) => {
-                            const c = getBadgeColors(event.status);
-                            const isLast = index === eventHistory.length - 1;
+                        {detalles_reportes?.historial_cambios?.map((event, index) => {
+                            const c = getBadgeColors(event.estado_asignado);
+                            const isLast = index === detalles_reportes.historial_cambios.length - 1;
 
                             return (
                                 <div key={event.id} style={{ display: 'flex', gap: '14px', position: 'relative' }}>

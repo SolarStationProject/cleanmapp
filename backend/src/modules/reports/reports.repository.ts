@@ -5,20 +5,23 @@ import { Reporte, DetalleReporteResponse, ValidacionReporte } from '../../shared
 export async function findByOwnReportesId(ciudadanoId: string): Promise<Reporte[]> {
     const queryText = `
         SELECT 
-            id,
-            ciudadano_id,
-            codigo,
-            descripcion,
-            foto,
-            fecha_creacion::text as fecha_creacion,
-            estado,
-            direccion,
-            comuna,
+            r.id,
+            r.ciudadano_id,
+            r.codigo,
+            r.descripcion,
+            r.foto,
+            r.fecha_creacion::text as fecha_creacion,
+            r.estado,
+            r.direccion,
+            r.comuna,
             ST_Y(geom) as latitud, -- Extrae latitud desde PostGIS
-            ST_X(geom) as longitud -- Extrae longitud desde PostGIS
-        FROM reportes
-        WHERE ciudadano_id = $1
-        ORDER BY fecha_creacion DESC;
+            ST_X(geom) as longitud, -- Extrae longitud desde PostGIS
+            u.rol
+        FROM reportes r
+        INNER JOIN usuarios u
+            ON r.ciudadano_id = u.id -- Vincula el reporte con su usuario
+        WHERE r.ciudadano_id = $1
+        ORDER BY r.fecha_creacion DESC;
     `;
     
     const result = await db.query(queryText, [ciudadanoId]);

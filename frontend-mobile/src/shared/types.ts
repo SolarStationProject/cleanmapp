@@ -54,15 +54,7 @@ export interface ComentarioInterno {
 }
 
 // Interfaz específica para mapear la respuesta de la pantalla ReportDetail
-export interface DetalleReporte {
-    id: string; 
-    ciudadano_id: string; 
-    descripcion?: string; 
-    foto?: string; 
-    fecha_creacion: string; 
-    estado: EstadoReporte;
-    latitud: number; 
-    longitud: number; 
-    historial_cambios: ValidacionReporte[]; // Renderiza el componente visual del Timeline
-    comentarios_internos?: ComentarioInterno[]; 
+export interface DetalleReporteResponse extends Reporte {
+    historial_cambios: ValidacionReporte[]; // Llena la línea de tiempo (público para todos)
+    comentarios_internos?: ComentarioInterno[]; // Privado (Solo si el solicitante es Admin)
 }

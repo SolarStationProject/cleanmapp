@@ -2,12 +2,13 @@ import { useAxios } from '../../../hooks/useAxios';
 import { useNavigate } from 'react-router-dom';
 import { Reporte } from '../../../shared/types';
 import { ICONS } from "../../../assets/icons"
+import { formatearFecha } from '../../../utils/formatters';
 import TabBar from "../../ui/TabBar"; // Reutilizamos tu barra inferior fija
 
-// Definimos la estructura de la respuesta del backend
+// Se define la estructura de la respuesta del backend
 interface BackendResponse {
-  success: boolean;
-  data: Reporte[];
+    success: boolean;
+    data: Reporte[] & { rol: string };
 }
 
 export default function MyReportsList() {
@@ -23,38 +24,15 @@ export default function MyReportsList() {
     const reportes = respuesta?.data; 
 
     // Renderizado de pantallas de carga y error del GET
-    if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
+    //if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
     if (error) return <p>Error al conectar con el servidor: {error}</p>;
 
-    // Datos idénticos a los que tienes en tu captura de pantalla
-    /*
-    const reports: ReportItem[] = [
-        {
-            id: "1",
-            code: "REP-2024-001",
-            title: "Vertedero ilegal en zona rural",
-            status: "Pendiente",
-            address: "Calle Los Pinos 234",
-            date: "15 Mar 2024"
-        },
-        {
-            id: "2",
-            code: "REP-2024-002",
-            title: "Escombros abandonados",
-            status: "Resuelto",
-            address: "Av. Central 567",
-            date: "12 Mar 2024"
-        },
-        {
-            id: "3",
-            code: "REP-2024-003",
-            title: "Residuos industriales",
-            status: "Pendiente",
-            address: "Zona Industrial Norte",
-            date: "10 Mar 2024"
-        }
-    ];
-    */
+    const handleMyReport = (reportId: string, rol: string) => {
+        // Viajamos a la siguiente pantalla metiendo los datos en el 'state'
+        navigate('/report-detail', { 
+            state: [reportId, rol]
+        });
+    };
 
     // Función auxiliar para pintar las etiquetas de estado idénticas a la captura
     const getStatusStyle = (status: 'Rechazado' | 'Pendiente' | 'Verificado') => {
@@ -172,93 +150,110 @@ export default function MyReportsList() {
                 overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '14px'
+                gap: '14px',
             }}>
-                {reportes?.map((report) => {
-                    const st = getStatusStyle(report.estado);
-                    return (
-                        <div 
-                            key={report.id}
-                            onClick={() => navigate("/report-detail")}
-                            style={{
-                                backgroundColor: '#ffffff',
-                                borderRadius: '24px',
-                                padding: '16px',
-                                border: '1px solid #f1f5f9',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '12px',
-                                position: 'relative'
-                            }}
-                        >
-                            {/* Fila Superior: Código y Etiqueta de Estado */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <ICONS.FileText />
-                                    <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748b', letterSpacing: '0.02em' }}>
-                                        {report.codigo}
-                                    </span>
-                                </div>
-                                <span style={{
-                                    fontSize: '12px',
-                                    fontWeight: '700',
-                                    padding: '4px 12px',
-                                    borderRadius: '12px',
-                                    backgroundColor: st.bg,
-                                    color: st.text,
-                                    border: `1px solid ${st.border}`
-                                }}>
-                                    {report.estado}
-                                </span>
-                            </div>
+                {/* 1. MIENTRAS CARGA: Mostramos indicadores limpios en vez de dejar el espacio vacío o gris plano */}
+                {loading? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', padding: '20px', textAlign: 'center', color: '#64748b' }}>
+                        {/* Puedes poner aquí un Spinner nativo o tarjetas vacías (Skeletons) */}
+                    </div>
+                ) : (
+                    // 2. CUANDO LLEGAN LOS DATOS: Renderiza tu diseño original a la perfección
+                    <>
+                        {reportes?.map((report) => {
+                            const r = report as Reporte & { rol: string }; 
+                            const st = getStatusStyle(r.estado);
+                            return (
+                                <div 
+                                    key={r.id}
+                                    onClick={() => handleMyReport(r.id, r.rol)} //navigate("/report-detail")
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        borderRadius: '24px',
+                                        padding: '16px',
+                                        border: '1px solid #f1f5f9',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '12px',
+                                        position: 'relative'
+                                    }}
+                                >
+                                    {/* Fila Superior: Código y Etiqueta de Estado */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <ICONS.FileText />
+                                            <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748b', letterSpacing: '0.02em' }}>
+                                                {r.codigo}
+                                            </span>
+                                        </div>
+                                        <span style={{
+                                            fontSize: '12px',
+                                            fontWeight: '700',
+                                            padding: '4px 12px',
+                                            borderRadius: '12px',
+                                            backgroundColor: st.bg,
+                                            color: st.text,
+                                            border: `1px solid ${st.border}`
+                                        }}>
+                                            {r.estado}
+                                        </span>
+                                    </div>
 
-                            {/* Fila Central: Título y Flecha de Navegación */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '4px' }}>
-                                <h3 style={{
-                                    fontSize: '16px',
-                                    fontWeight: '700',
-                                    color: '#1e293b',
-                                    margin: 0,
-                                    lineHeight: '1.3',
-                                    maxWidth: '85%'
-                                }}>
-                                    {report.descripcion}
-                                </h3>
-                                <ICONS.ChevronRight />
-                            </div>
+                                    {/* Fila Central: Título y Flecha de Navegación */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: '4px' }}>
+                                        <h3 style={{
+                                            fontSize: '16px',
+                                            fontWeight: '700',
+                                            color: '#1e293b',
+                                            margin: 0,
+                                            lineHeight: '1.3',
+                                            maxWidth: '85%'
+                                        }}>
+                                            {r.descripcion}
+                                        </h3>
+                                        <ICONS.ChevronRight />
+                                    </div>
 
-                            {/* Fila Inferior: Detalles de Dirección y Calendario */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <ICONS.MapPin />
-                                    <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '-6px' }}>{report.direccion}</span>
+                                    {/* Fila Inferior: Detalles de Dirección y Calendario */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <ICONS.MapPin />
+                                            <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '-6px' }}>{r.direccion}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px'}}>
+                                            <ICONS.Calendar />
+                                            <span style={{ fontSize: '12px', color: '#64748b' }}>{formatearFecha(r.fecha_creacion)}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px'}}>
-                                    <ICONS.Calendar />
-                                    <span style={{ fontSize: '12px', color: '#64748b' }}>{report.fecha_creacion}</span>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
-
-                {/* Texto Informativo en el Pie de Página */}
-                <p style={{
-                    fontSize: '12px',
-                    color: '#64748b',
-                    textAlign: 'center',
-                    marginTop: '8px',
-                    marginBottom: '80px', // Evita que la barra tape este texto al bajar el scroll
-                    fontWeight: '500'
-                }}>
-                    Toca un reporte para ver su estado e historial
-                </p>
+                            );
+                        })}
+                        
+                        {/* Si la base de datos devolvió 0 filas, evitamos el espacio muerto */}
+                        {reportes?.length === 0 && (
+                            <p style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', marginTop: '40px' }}>
+                                No tienes reportes creados en esta zona.
+                            </p>
+                        )}
+                    </>
+                )}
+                {/* Texto Informativo en el Pie de Página (Solo si no está cargando) */}
+                {!loading && (
+                    <p style={{
+                        fontSize: '12px',
+                        color: '#64748b',
+                        textAlign: 'center',
+                        marginTop: '8px',
+                        marginBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))',//'80px', // Evita que la barra tape este texto al bajar el scroll
+                        fontWeight: '500',
+                    }}>
+                        Toca un reporte para ver su estado e historial
+                    </p>
+                )}
             </div>
-
             {/* Barra Inferior Fija Fuera del Scroll */}
             <TabBar currentTab="my-reports"/>
-
         </div>
     );
 }
