@@ -2,6 +2,7 @@ import { db } from '../../config/database';
 import { Reporte, DetalleReporteResponse, ValidacionReporte } from '../../shared/types';
 
 // Obtiene los detalles de los reportes de un usuario específico
+/*
 export async function findByCiudadanoId(ciudadanoId: string): Promise<Reporte[]> {
     const queryText = `
         SELECT id, ciudadano_id, descripcion, foto, fecha_creacion, estado, prioridad, latitud, longitud 
@@ -13,9 +14,10 @@ export async function findByCiudadanoId(ciudadanoId: string): Promise<Reporte[]>
     const result = await db.query(queryText, [ciudadanoId]);
     return result.rows as Reporte[];
 }
+*/
 
 // Obtiene la lista de reportes creados por un ciudadano específico.
-export async function findByOwnReportesId(reporteId: string): Promise<Reporte[]> {
+export async function findByOwnReportesId(ciudadanoId: string): Promise<Reporte[]> {
     const queryText = `
         SELECT 
             id,
@@ -32,7 +34,7 @@ export async function findByOwnReportesId(reporteId: string): Promise<Reporte[]>
         ORDER BY fecha_creacion DESC;
     `;
     
-    const result = await db.query(queryText, [reporteId]);
+    const result = await db.query(queryText, [ciudadanoId]);
     return result.rows as Reporte[];
 }
 

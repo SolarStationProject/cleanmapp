@@ -69,9 +69,3 @@ export interface DetalleReporte {
     historial_cambios: ValidacionReporte[]; // Renderiza el componente visual del Timeline
     comentarios_internos?: ComentarioInterno[]; 
 }
-
-export interface ApiResponse<T> {
-    success: boolean;
-    message?: string;
-    data: T;
-}

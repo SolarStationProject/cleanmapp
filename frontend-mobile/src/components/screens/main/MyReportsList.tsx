@@ -1,7 +1,6 @@
-//import React, { useEffect, useState } from 'react';
-//import { api } from '../../services/api';
-//import { Reporte, ApiResponse } from '../../shared/types';
+import { useAxios } from '../../../hooks/useAxios';
 import { useNavigate } from 'react-router-dom';
+import { Reporte } from '../../../shared/types';
 import { ICONS } from "../../../assets/icons"
 import TabBar from "../../ui/TabBar"; // Reutilizamos tu barra inferior fija
 
@@ -16,6 +15,11 @@ interface ReportItem {
 
 export default function MyReportsList() {
     const navigate = useNavigate();
+    const { data: _reportes, loading, error } = useAxios<Reporte[]>('/api/reports');
+
+    // Renderizado de pantallas de carga y error del GET
+    if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
+    if (error) return <p>Error al conectar con el servidor: {error}</p>;
 
     // Datos idénticos a los que tienes en tu captura de pantalla
     const reports: ReportItem[] = [
@@ -23,7 +27,7 @@ export default function MyReportsList() {
             id: "1",
             code: "REP-2024-001",
             title: "Vertedero ilegal en zona rural",
-            status: "En proceso",
+            status: "Pendiente",
             address: "Calle Los Pinos 234",
             date: "15 Mar 2024"
         },

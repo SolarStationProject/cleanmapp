@@ -22,7 +22,6 @@ globalMiddlewares(server);
 // Enrutamiento Principal (Conexión con tus módulos de negocio)
 server.use('/api/reports', reportsRoutes)
 
-
 // Middleware modularizado de errores (Siempre al final de las rutas)
 server.use(errorHandler);
 
