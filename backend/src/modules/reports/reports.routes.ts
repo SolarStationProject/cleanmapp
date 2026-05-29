@@ -9,7 +9,7 @@ import {
 const router = Router();
 
 // Obtener la lista de reportes del ciudadano autenticado
-router.get('/mis-reportes', getReportesPropios); // /api/reports/mis-reportes
+router.get('/my-reports', getReportesPropios); // /api/reports/mis-reportes
 
 //Obtener el detalle extendido y el timeline de un reporte específico
 router.get('/:id', getDetalleReporte); // /api/reports/:id

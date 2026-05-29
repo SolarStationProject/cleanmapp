@@ -4,24 +4,30 @@ import { Reporte } from '../../../shared/types';
 import { ICONS } from "../../../assets/icons"
 import TabBar from "../../ui/TabBar"; // Reutilizamos tu barra inferior fija
 
-interface ReportItem {
-    id: string;
-    code: string;
-    title: string;
-    status: 'Pendiente' | 'En proceso' | 'Resuelto';
-    address: string;
-    date: string;
+// Definimos la estructura de la respuesta del backend
+interface BackendResponse {
+  success: boolean;
+  data: Reporte[];
 }
 
 export default function MyReportsList() {
     const navigate = useNavigate();
-    const { data: _reportes, loading, error } = useAxios<Reporte[]>('/api/reports');
+
+    // Definimos un parámetro de prueba (id)
+    const ciudadanoId = 'c2222222-2222-2222-2222-222222222222';
+    const { data: respuesta, loading, error } = useAxios<BackendResponse>(
+        '/api/reports/my-reports', //endpoint
+        { ciudadanoId } //parámetro
+    );
+
+    const reportes = respuesta?.data; 
 
     // Renderizado de pantallas de carga y error del GET
     if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
     if (error) return <p>Error al conectar con el servidor: {error}</p>;
 
     // Datos idénticos a los que tienes en tu captura de pantalla
+    /*
     const reports: ReportItem[] = [
         {
             id: "1",
@@ -48,15 +54,16 @@ export default function MyReportsList() {
             date: "10 Mar 2024"
         }
     ];
+    */
 
     // Función auxiliar para pintar las etiquetas de estado idénticas a la captura
-    const getStatusStyle = (status: 'Pendiente' | 'En proceso' | 'Resuelto') => {
+    const getStatusStyle = (status: 'Rechazado' | 'Pendiente' | 'Verificado') => {
         switch (status) {
-            case 'En proceso':
+            case 'Rechazado':
                 return { bg: '#e0f2fe', text: '#0284c7', border: '#bae6fd' };
-            case 'Resuelto':
-                return { bg: '#e6f4ea', text: '#137333', border: '#ceead6' };
             case 'Pendiente':
+                return { bg: '#e6f4ea', text: '#137333', border: '#ceead6' };
+            case 'Verificado':
                 return { bg: '#fef3c7', text: '#d97706', border: '#fde68a' };
         }
     };
@@ -146,15 +153,15 @@ export default function MyReportsList() {
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <p style={{ fontSize: '18px', fontWeight: '800', color: '#d97706', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Pendientes</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Rechazados</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <p style={{ fontSize: '18px', fontWeight: '800', color: '#0284c7', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>En proceso</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Pendientes</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                     <p style={{ fontSize: '18px', fontWeight: '800', color: '#10b981', margin: 0 }}>1</p>
-                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Resueltos</p>
+                    <p style={{ fontSize: '14px', color: '#64748b', margin: '2px 0 0 0' }}>Verificados</p>
                 </div>
             </div>
 
@@ -167,8 +174,8 @@ export default function MyReportsList() {
                 flexDirection: 'column',
                 gap: '14px'
             }}>
-                {reports.map((report) => {
-                    const st = getStatusStyle(report.status);
+                {reportes?.map((report) => {
+                    const st = getStatusStyle(report.estado);
                     return (
                         <div 
                             key={report.id}
@@ -190,7 +197,7 @@ export default function MyReportsList() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <ICONS.FileText />
                                     <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748b', letterSpacing: '0.02em' }}>
-                                        {report.code}
+                                        {report.codigo}
                                     </span>
                                 </div>
                                 <span style={{
@@ -202,7 +209,7 @@ export default function MyReportsList() {
                                     color: st.text,
                                     border: `1px solid ${st.border}`
                                 }}>
-                                    {report.status}
+                                    {report.estado}
                                 </span>
                             </div>
 
@@ -216,7 +223,7 @@ export default function MyReportsList() {
                                     lineHeight: '1.3',
                                     maxWidth: '85%'
                                 }}>
-                                    {report.title}
+                                    {report.descripcion}
                                 </h3>
                                 <ICONS.ChevronRight />
                             </div>
@@ -225,11 +232,11 @@ export default function MyReportsList() {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingTop: '4px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                     <ICONS.MapPin />
-                                    <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '-6px' }}>{report.address}</span>
+                                    <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '-6px' }}>{report.direccion}</span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px'}}>
                                     <ICONS.Calendar />
-                                    <span style={{ fontSize: '12px', color: '#64748b' }}>{report.date}</span>
+                                    <span style={{ fontSize: '12px', color: '#64748b' }}>{report.fecha_creacion}</span>
                                 </div>
                             </div>
                         </div>
@@ -255,48 +262,4 @@ export default function MyReportsList() {
         </div>
     );
 }
-
-
-/*
-export const MyReportsList: React.FC = () => {
-    const [reportes, setReportes] = useState<Reporte[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        api.get<ApiResponse<Reporte[]>>('/api/reports/mis-reportes')
-            .then(response => {
-                if (response.data.success) {
-                    setReportes(response.data.data);
-                }
-            })
-            .catch(err => {
-                console.error('Error al cargar reportes propios:', err);
-                setError('No se pudo conectar con el servidor de CleanMap.');
-            })
-            .finally(() => setLoading(false));
-    }, []);
-
-    if (loading) return <p>Cargando tus reportes de CleanMap...</p>;
-    if (error) return <p style={{ color: 'red' }}>{error}</p>;
-
-    return (
-        <div className="reports-list">
-            {reportes.length === 0 ? (
-                <p>No has realizado ningún reporte aún.</p>
-            ) : (
-                reportes.map(reporte => (
-                    <div key={reporte.id} className="report-card" style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
-                        <h3>Ubicación: {reporte.latitud}, {reporte.longitud}</h3>
-                        <p>{reporte.descripcion || 'Sin descripción'}</p>
-                        <span className={`badge status-${reporte.estado.toLowerCase()}`}>
-                            Estado: <strong>{reporte.estado}</strong>
-                        </span>
-                    </div>
-                ))
-            )}
-        </div>
-    );
-};
-*/
 

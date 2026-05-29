@@ -1,46 +1,20 @@
 import { Request, Response } from 'express';
 import * as reportsService from './reports.service';
 import { DetalleReporteResponse } from '../../shared/types';
-/*
+
+//1. ASOCIADO A: findByOwnReportesId
+//Carga la lista de reportes del ciudadano autenticado.
 export async function getReportesPropios(req: Request, res: Response) {
     try {
-        // Buscamos el ID real. Si no existe (porque no hay token), será 'undefined'
-        const ciudadanoId = (req as any).user?.id;  
-
-        // Si hay ID, busca en la DB. Si NO hay ID, le damos un arreglo vacío [] al instante sin tocar la base de datos.
-        const reportes = ciudadanoId 
-            ? await reportsService.getReportesPropios(ciudadanoId) 
-            : [];
-
-        // Respondemos al frontend con éxito
-        return res.status(200).json({
-            success: true,
-            data: reportes
-        });
-
-    } catch (error) {
-        console.error('Error en getReportesPropios:', error);
-        return res.status(500).json({ 
-            success: false, 
-            message: 'Error interno en el servidor de reportes' 
-        });
-    }
-}
-*/
-/**
- * 1. ASOCIADO A: findByOwnReportesId
- * Carga la lista de reportes del ciudadano autenticado.
- */
-export async function getReportesPropios(req: Request, res: Response) {
-    try {
-        const ciudadanoId = (req as any).user?.id;  
+        //const ciudadanoId = (req as any).user?.id;  
+        const { ciudadanoId } = req.query;
 
         if (!ciudadanoId) {
             return res.status(200).json({ success: true, data: [] });
         }
 
         // Llamada directa 1 a 1 al repositorio
-        const reportes = await reportsService.getReportesPropios(ciudadanoId);
+        const reportes = await reportsService.getReportesPropios(ciudadanoId as string);
 
         return res.status(200).json({
             success: true,
@@ -52,10 +26,8 @@ export async function getReportesPropios(req: Request, res: Response) {
     }
 }
 
-/**
- * 2. ASOCIADO A: findDetailsByReporteId
- * Obtiene el objeto detallado de un reporte y aplica el filtro de privacidad HU021.
- */
+//2. ASOCIADO A: findDetailsByReporteId
+//Obtiene el objeto detallado de un reporte y aplica el filtro de privacidad HU021.
 export async function getDetalleReporte(req: Request, res: Response) {
     try {
         const { id } = req.params; 
@@ -87,10 +59,8 @@ export async function getDetalleReporte(req: Request, res: Response) {
     }
 }
 
-/**
- * 3. ASOCIADO A: addChangeHistorialReportesId
- * Inserta exclusivamente la nota técnica en la línea de tiempo de validaciones.
- */
+//3. ASOCIADO A: addChangeHistorialReportesId
+//Inserta exclusivamente la nota técnica en la línea de tiempo de validaciones.
 export async function crearCambioHistorial(req: Request, res: Response) {
     try {
         const { reporteId } = req.params; // ID del reporte
@@ -119,10 +89,9 @@ export async function crearCambioHistorial(req: Request, res: Response) {
     }
 }
 
-/**
- * 4. ASOCIADO A: updatedEstadoReportesId
- * Modifica o mantiene de forma directa el estado principal en la tabla del reporte.
- */
+
+//4. ASOCIADO A: updatedEstadoReportesId
+//Modifica o mantiene de forma directa el estado principal en la tabla del reporte.
 export async function actualizarEstadoReporte(req: Request, res: Response) {
     try {
         const { reporteId } = req.params; // ID del reporte

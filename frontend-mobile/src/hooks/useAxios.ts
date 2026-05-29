@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { api } from '../services/api'
 
-export function useAxios<T>(url: string) {
+export function useAxios<T>(url: string, params?: Record<string, any>) {
     const [data, setData] = useState<T | null>(null); 
     const [loading, setLoading] = useState<boolean>(true); 
     const [error, setError] = useState<string | null>(null); 
@@ -14,7 +14,7 @@ export function useAxios<T>(url: string) {
         setLoading(true);
 
         // Se usa la instancia 'api'. Ya tiene la IP configurada, solo requiere la ruta (ej: '/api/reports')
-        api.get<T>(url, { cancelToken: source.token })
+        api.get<T>(url, { cancelToken: source.token, params: params })
             .then((res) => {
                 // Axios ya convierte la respuesta a JSON automáticamente en res.data
                 setData(res.data);
@@ -31,7 +31,8 @@ export function useAxios<T>(url: string) {
 
         // Al desmontar la pantalla, se cancela la petición de Axios
         return () => source.cancel('Componente desmontado');
-    }, [url]); 
+        // Se escucha los cambios en la URL o en los parámetros
+    }, [url, JSON.stringify(params)]); 
 
     return { data, loading, error };
 }
