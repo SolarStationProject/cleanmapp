@@ -20,6 +20,7 @@ export interface Reporte extends Ubicacion {
     id: string; 
     ciudadano_id: string; 
     codigo: string;
+    titulo: string;
     descripcion?: string; 
     foto?: string; 
     fecha_creacion: string; 

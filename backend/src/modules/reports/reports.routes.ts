@@ -3,7 +3,8 @@ import {
     getReportesPropios, 
     getDetalleReporte, 
     crearCambioHistorial, 
-    actualizarEstadoReporte 
+    actualizarEstadoReporte ,
+    obtenerReportes
 } from './reports.controller';
 //import { upload } from '../../middlewares';
 
@@ -14,6 +15,8 @@ router.get('/my-reports', getReportesPropios); // /api/reports/mis-reportes
 
 //Obtener el detalle extendido y el timeline de un reporte específico
 router.get('/:id', getDetalleReporte); // /api/reports/:id
+
+router.get('/', obtenerReportes);
 
 // Insertar un nuevo hito/comentario en la línea de tiempo
 router.post('/:id/history', crearCambioHistorial); // /api/reports/:id/history

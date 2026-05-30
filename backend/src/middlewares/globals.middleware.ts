@@ -3,8 +3,12 @@ import helmet from 'helmet';
 import cors from 'cors';
 
 export const globalMiddlewares = (server: Application): void => {
-    // Seguridad de cabeceras HTTP
-    server.use(helmet());
+    // Seguridad de cabeceras HTTP optimizada para desarrollo móvil/cross-origin
+    server.use(helmet({
+        crossOriginOpenerPolicy: { policy: "unsafe-none" },
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+        crossOriginEmbedderPolicy: false
+    }));
 
     // Configuración de CORS
     server.use(cors({

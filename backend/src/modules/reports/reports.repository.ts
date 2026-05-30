@@ -1,5 +1,5 @@
 import { db } from '../../config/database';
-import { Reporte, DetalleReporteResponse, ValidacionReporte } from '../../shared/types';
+import { Reporte, DetalleReporteResponse, ValidacionReporte, RolUsuario } from '../../shared/types';
 
 // Obtiene la lista de reportes creados por un ciudadano específico.
 export async function findByOwnReportesId(ciudadanoId: string): Promise<Reporte[]> {
@@ -117,6 +117,30 @@ export async function updatedEstadoReportesId(reporteId: string, nuevoEstado: st
     // Mapeo correcto de los parámetros [$1 = nuevoEstado, $2 = reporteId]
     const result = await db.query(queryText, [nuevoEstado, reporteId]);
     return result.rows[0].estado;
+}
+
+// El usuario le da id de ciudadano y rol
+export async function obtenerTodos(usuarioId: string, usuarioRol: RolUsuario): Promise<Reporte[]> {
+    const queryText = `
+        SELECT 
+            id,
+            ciudadano_id,
+            codigo,
+            descripcion,
+            foto,
+            fecha_creacion,
+            estado,
+            direccion,
+            comuna,
+            ST_Y(geom) AS latitud,
+            ST_X(geom) AS longitud
+        FROM reportes
+        WHERE (ciudadano_id != $1::uuid OR $2 = 'Admin')
+        ORDER BY fecha_creacion DESC;
+    `;
+
+    const result = await db.query(queryText, [usuarioId, usuarioRol]);
+    return result.rows;
 }
 
 /*

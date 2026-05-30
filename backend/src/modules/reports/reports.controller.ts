@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as reportsService from './reports.service';
-import { DetalleReporteResponse } from '../../shared/types';
+import { DetalleReporteResponse, RolUsuario } from '../../shared/types';
 
 //1. ASOCIADO A: findByOwnReportesId
 //Carga la lista de reportes del ciudadano autenticado.
@@ -113,6 +113,56 @@ export async function actualizarEstadoReporte(req: Request, res: Response) {
         return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
     }
 }
+
+
+
+
+
+
+
+//Controlador para listar los reportes del sistema basándose en el rol del usuario autenticado.
+export const obtenerReportes = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // NOTA: Se asume que tu auth.middleware inyectará estos datos en req.usuario
+        // Si TypeScript reclama por la propiedad, puedes usar (req as any).usuario
+        const { usuarioId } = req.query;
+        const { usuarioRol } = req.query;
+
+        // Validación de seguridad manual
+        if (!usuarioId || !usuarioRol) {
+            res.status(401).json({ 
+                status: 'error', 
+                message: 'No autorizado. Faltan credenciales de sesión.' 
+            });
+            return;
+        }
+
+        // Llamada a la capa de negocio
+        const reportes = await reportsService.obtenerReportesPorRol(usuarioId as string, usuarioRol as RolUsuario);
+
+        // Respuesta directa y exitosa al frontend-mobile
+        res.status(200).json({
+            status: 'success',
+            results: reportes.length,
+            data: reportes
+        });
+        
+    } catch (error) {
+        console.error('Error en obtenerReportes:', error);
+        
+        // Respuesta de error inmediata controlada aquí mismo
+        res.status(500).json({
+            status: 'error',
+            message: 'Ocurrió un error interno en el servidor al obtener los reportes.'
+        });
+    }
+};
+
+
+
+
+
+
 
 /*
 export const createReport = async (req: Request, res: Response) => {

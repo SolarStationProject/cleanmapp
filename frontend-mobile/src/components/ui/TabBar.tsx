@@ -30,7 +30,7 @@ export default function TabBar({ currentTab }: TabBarProps) {
         { id: 'home', label: 'Inicio', icon: ICONS.Home },
         { id: 'map', label: 'Mapa', icon: ICONS.Map },
         { id: 'new-report', label: 'Reportar', icon: ICONS.Plus, isCenter: true },
-        { id: 'reports', label: 'Reportes', icon: ICONS.FileText },
+        { id: 'my-reports', label: 'Mis reportes', icon: ICONS.FileText },
         { id: 'profile', label: 'Perfil', icon: ICONS.User },
     ];
 

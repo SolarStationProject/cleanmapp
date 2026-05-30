@@ -1,4 +1,5 @@
 import { useAxios } from '../../../hooks/useAxios';
+import { API_URL } from '../../../services/api'
 import { useNavigate, useLocation } from "react-router-dom";
 import { ICONS } from "../../../assets/icons";
 import { IMAGES } from "../../../assets/images"; 
@@ -150,11 +151,12 @@ export default function ReportDetail() {
                                     <img 
                                         // Si la foto empieza con 'http' o 'uploads' viene del backend real; 
                                         // de lo contrario, puedes inyectar tu recurso simulado local del archivo images.ts
-                                        src={detalles_reportes.foto.startsWith('http') || detalles_reportes.foto.startsWith('uploads')
-                                            ? detalles_reportes.foto 
+                                        src={detalles_reportes.foto.startsWith('http') || detalles_reportes.foto.startsWith('/uploads')
+                                            ? `${API_URL}${detalles_reportes.foto}` 
                                             : IMAGES.basural1
                                         } 
-                                        alt="Evidencia del reporte" 
+                                        alt="Evidencia del reporte"
+                                        crossOrigin="anonymous"
                                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
                                     />
                                 </div>

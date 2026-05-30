@@ -1,5 +1,5 @@
 import * as reportsRepository from './reports.repository';
-import { Reporte, DetalleReporteResponse, ValidacionReporte } from '../../shared/types';
+import { Reporte, DetalleReporteResponse, ValidacionReporte, RolUsuario } from '../../shared/types';
 
 export async function getReportesPropios(ciudadanoId: string): Promise<Reporte[]> {
     // Si la DB está vacía, esto simplemente retornará un arreglo vacío []
@@ -30,6 +30,12 @@ export async function actualizarEstadoReporte(reporteId: string, nuevoEstado: st
     // Si la DB está vacía, esto simplemente retornará un arreglo vacío []
     return await reportsRepository.updatedEstadoReportesId(reporteId, nuevoEstado);
 }
+
+export const obtenerReportesPorRol = async (usuarioId: string, usuarioRol: RolUsuario): Promise<Reporte[]> => {
+    // Aquí puedes meter lógica de negocio futura (ej: filtrar por comunas permitidas, cachear datos, etc.)
+    return await reportsRepository.obtenerTodos(usuarioId, usuarioRol);
+};
+
 
 // Definimos la interfaz del reporte que se va a crear
 /*

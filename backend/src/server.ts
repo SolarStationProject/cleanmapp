@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
 
 //Importación de rutas
 import reportsRoutes from './modules/reports/reports.routes' //reportsRoutes es un alias de la ruta
@@ -21,6 +22,10 @@ globalMiddlewares(server);
 
 // Enrutamiento Principal (Conexión con tus módulos de negocio)
 server.use('/api/reports', reportsRoutes)
+
+// 2. Servir archivos estáticos (Imágenes de reportes)
+// Hace que backend/uploads/ sea accesible desde http://localhost:3000/uploads/
+server.use('/uploads', express.static(path.join(__dirname, './uploads')));
 
 // Middleware modularizado de errores (Siempre al final de las rutas)
 server.use(errorHandler);
