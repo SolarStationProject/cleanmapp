@@ -42,7 +42,7 @@ export interface Notificacion {
     usuario_id: string; 
     mensaje: string;
     tipo: string; 
-    fecha_envio: string; // Cambiado a string
+    fecha_envio: string;
     leida: boolean;
 }
 

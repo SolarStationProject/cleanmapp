@@ -21,7 +21,7 @@ VALUES
         'Microbasural acumulado en la esquina del parque. Hay restos de poda y plásticos.', 
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...', -- Simulación de Base64 de la cámara
         NOW() - INTERVAL '3 days', 
-        'Pendiente', 
+        'Verificado', 
         'Calle Los Pinos 234', --Simulación de calle (activar ubicación en el futuro si es requerido)
         'San Bernardo', -- Simulación de comuna (activar ubicación en el futuro si es requerido)
         ST_SetSRID(ST_MakePoint(-70.6506, -33.4372), 4326) -- Coordenadas en Santiago, Chile
@@ -45,7 +45,7 @@ VALUES
         'Contenedor municipal desbordado de basura orgánica.', 
         'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...', 
         NOW() - INTERVAL '5 days', 
-        'Verificado', 
+        'Rechazado', 
         'Zona Industrial Norte',
         'San Miguel', 
         ST_SetSRID(ST_MakePoint(-70.6480, -33.4350), 4326)
@@ -54,17 +54,17 @@ VALUES
 -- 4. INSERTAR HISTORIAL DE CAMBIOS (Para alimentar la línea de tiempo/Timeline de la app)
 INSERT INTO validacion_reportes (id, reporte_id, usuario_id, fecha, estado_asignado, comentario)
 VALUES 
-    -- Línea de tiempo para el Reporte 1 ('Pendiente')
-    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'c2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '3 days', 'Pendiente', 'Reporte creado por el ciudadano desde la aplicación móvil.'),
-    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', NOW() - INTERVAL '2 days', 'Verificado', 'Inspección visual realizada. Se confirma acumulación crítica de residuos.'),
-    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', NOW() - INTERVAL '1 day', 'Pendiente', 'Asignado al camión recolector de la Zona Norte. Despliegue programado.'),
+    -- Línea de tiempo para el Reporte 1 ('Verificado')
+    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'c2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '3 days', 'Pendiente', 'Reporte creado.'),
+    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', NOW() - INTERVAL '2 days', 'Pendiente', 'Inspección visual realizada. Se confirma acumulación crítica de residuos.'),
+    (gen_random_uuid(), '01111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', NOW() - INTERVAL '1 day', 'Verificado', 'Asignado al camión recolector de la Zona Norte. Despliegue programado.'),
 
     -- Línea de tiempo para el Reporte 2 ('Pendiente')
-    (gen_random_uuid(), '02222222-2222-2222-2222-222222222222', 'c2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '1 day', 'Pendiente', 'Reporte ingresado al sistema en espera de revisión por moderación.'),
+    (gen_random_uuid(), '02222222-2222-2222-2222-222222222222', 'c2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '1 day', 'Pendiente', 'Reporte creado.'),
 
-    -- Línea de tiempo para el Reporte 3 ('Verificado')
+    -- Línea de tiempo para el Reporte 3 ('Rechazado')
     (gen_random_uuid(), '03333333-3333-3333-3333-333333333333', 'c2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '5 days', 'Pendiente', 'Reporte creado.'),
-    (gen_random_uuid(), '03333333-3333-3333-3333-333333333333', 'a1111111-1111-1111-1111-111111111111', NOW() - INTERVAL '4 days', 'Verificado', 'Validado por la central. Se notificará a la cuadrilla de limpieza urbana.');
+    (gen_random_uuid(), '03333333-3333-3333-3333-333333333333', 'a2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '4 days', 'Rechazado', 'Reporte invalidado. Ya ha sido reportado por otro usuario.');
 
 -- 5. INSERTAR COMENTARIOS INTERNOS (Exclusivos para Admins - HU021)
 INSERT INTO comentarios_internos (id, reporte_id, admin_id, comentario, fecha_creacion)

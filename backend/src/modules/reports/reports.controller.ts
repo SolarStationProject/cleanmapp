@@ -33,9 +33,6 @@ export async function getDetalleReporte(req: Request, res: Response) {
         const { id } = req.query; 
         const {usuarioRol} = req.query; 
 
-        console.log('valor de id: ',id)
-        console.log('valor de rol: ',usuarioRol)
-
         if (!id) {
             return res.status(400).json({ success: false, message: 'El ID del reporte es requerido.' });
         }

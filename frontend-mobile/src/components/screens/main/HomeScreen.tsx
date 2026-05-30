@@ -56,7 +56,6 @@ export default function HomeScreen() {
             icon: ICONS.Bell,
             label: "Notificaciones",
             description: "Alertas y actualizaciones",
-            badge: 2,
         },
     ];
 
@@ -147,32 +146,6 @@ export default function HomeScreen() {
                 </div>
             </div>
 
-            {/* Bloque Flotante de Contadores */}
-            <div style={{ padding: '0 16px', marginTop: '-20px' }}>
-                <div style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '24px',
-                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
-                    border: '1px solid #f1f5f9',
-                    padding: '16px'
-                }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', textAlign: 'center' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#005c2e', margin: 0 }}>5</p>
-                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>Reportes</p>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', borderLeft: '1px solid #f1f5f9', borderRight: '1px solid #f1f5f9' }}>
-                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#10b981', margin: 0 }}>3</p>
-                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>Resueltos</p>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <p style={{ fontSize: '24px', fontWeight: '900', color: '#0284c7', margin: 0 }}>2</p>
-                            <p style={{ fontSize: '12px', fontWeight: '600', color: '#64748b', marginTop: '4px', margin: 0 }}>En proceso</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
             {/* Listado Principal de Acciones de la Calle con Scroll */}
             <div style={{
                 flex: 1,

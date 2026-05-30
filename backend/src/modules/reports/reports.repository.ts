@@ -16,6 +16,7 @@ export async function findByOwnReportesId(ciudadanoId: string): Promise<Reporte[
             r.comuna,
             ST_Y(geom) as latitud, -- Extrae latitud desde PostGIS
             ST_X(geom) as longitud, -- Extrae longitud desde PostGIS
+            u.nombre,
             u.rol
         FROM reportes r
         INNER JOIN usuarios u

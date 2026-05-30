@@ -38,11 +38,11 @@ export default function MyReportsList() {
     const getStatusStyle = (status: 'Rechazado' | 'Pendiente' | 'Verificado') => {
         switch (status) {
             case 'Rechazado':
-                return { bg: '#e0f2fe', text: '#0284c7', border: '#bae6fd' };
+                return { bg: '#fed6c7', text: '#d93006', border: '#fde68a' };
             case 'Pendiente':
-                return { bg: '#e6f4ea', text: '#137333', border: '#ceead6' };
+                return { bg: '#e0f2fe', text: '#0284c7', border: '#bae6fd' }
             case 'Verificado':
-                return { bg: '#fef3c7', text: '#d97706', border: '#fde68a' };
+                return { bg: '#e6f4ea', text: '#137333', border: '#ceead6' }
         }
     };
 
