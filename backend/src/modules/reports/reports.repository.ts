@@ -118,3 +118,57 @@ export async function updatedEstadoReportesId(reporteId: string, nuevoEstado: st
     const result = await db.query(queryText, [nuevoEstado, reporteId]);
     return result.rows[0].estado;
 }
+
+/*
+interface InsertReportParams {
+    ciudadano_id: string;
+    descripcion?: string;
+    direccion: string;
+    comuna: string;
+    latitud: number;
+    longitud: number;
+    foto?: string;
+}
+
+export const insertReport = async (data: InsertReportParams) => {
+    // Generamos un código corto aleatorio para el reporte (ej: REP-7492)
+    const codigoGenerado = `REP-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const query = `
+    INSERT INTO reportes (
+      id, 
+      ciudadano_id, 
+      codigo, 
+      descripcion, 
+      direccion, 
+      comuna, 
+      latitud, 
+      longitud, 
+      foto, 
+      estado, 
+      fecha_creacion
+    ) 
+    VALUES (
+      gen_random_uuid(), -- Genera el UUID en PostgreSQL
+      $1, $2, $3, $4, $5, $6, $7, $8, 
+      'Pendiente',        -- Todo reporte inicia en 'Pendiente'
+      NOW()               -- Timestamp actual
+    )
+    RETURNING *; -- Nos devuelve el reporte recién creado con su ID e información completa
+  `;
+
+    const values = [
+        data.ciudadano_id,
+        codigoGenerado,
+        data.descripcion || null,
+        data.direccion,
+        data.comuna,
+        data.latitud,
+        data.longitud,
+        data.foto || null // Si no subió foto, se guarda como NULL en PostgreSQL
+    ];
+
+    const result = await pool.query(query, values);
+    return result.rows[0]; // Retorna el registro creado
+};
+*/

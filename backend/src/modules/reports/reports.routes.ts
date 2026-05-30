@@ -5,6 +5,7 @@ import {
     crearCambioHistorial, 
     actualizarEstadoReporte 
 } from './reports.controller';
+//import { upload } from '../../middlewares';
 
 const router = Router();
 
@@ -16,6 +17,9 @@ router.get('/:id', getDetalleReporte); // /api/reports/:id
 
 // Insertar un nuevo hito/comentario en la línea de tiempo
 router.post('/:id/history', crearCambioHistorial); // /api/reports/:id/history
+
+// 'foto' es el nombre del campo que enviará el frontend (React)
+//router.post('/crear', upload.single('foto'), reportsController.createReport);
 
 // Actualizar de forma directa el estado en la tabla del reporte
 router.put('/:id/status', actualizarEstadoReporte); // /api/reports/:id/status

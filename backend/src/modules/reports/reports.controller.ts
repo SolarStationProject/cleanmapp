@@ -113,3 +113,29 @@ export async function actualizarEstadoReporte(req: Request, res: Response) {
         return res.status(500).json({ success: false, message: 'Error interno del servidor.' });
     }
 }
+
+/*
+export const createReport = async (req: Request, res: Response) => {
+    try {
+        const { ciudadano_id, descripcion, direccion, comuna, latitud, longitud } = req.body;
+
+        // Si el usuario subió una foto, el middleware nos deja la ruta aquí:
+        // Ejemplo: 'uploads/reportes/uuid-usuario/reporte-123.jpg'
+        const fotoPath = req.file ? `uploads/reportes/${ciudadano_id}/${req.file.filename}` : undefined;
+
+        const nuevoReporte = await reportsService.createNewReport({
+            ciudadano_id,
+            descripcion,
+            direccion,
+            comuna,
+            latitud,
+            longitud,
+            foto: fotoPath // Se envía directo al servicio -> repositorio -> BD
+        });
+
+        res.status(201).json({ success: true, data: nuevoReporte });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};
+*/

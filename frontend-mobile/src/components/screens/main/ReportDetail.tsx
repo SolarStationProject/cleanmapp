@@ -1,6 +1,7 @@
 import { useAxios } from '../../../hooks/useAxios';
 import { useNavigate, useLocation } from "react-router-dom";
 import { ICONS } from "../../../assets/icons";
+import { IMAGES } from "../../../assets/images"; 
 import { DetalleReporteResponse } from '../../../shared/types';
 import { formatearFecha, formatearHora } from '../../../utils/formatters';
 import TabBar from "../../ui/TabBar";
@@ -143,6 +144,26 @@ export default function ReportDetail() {
                                     <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{detalles_reportes?.direccion}</p>
                                 </div>
                             </div>
+                            {/*Foto*/}
+                            {detalles_reportes?.foto ? (
+                                <div style={{ marginTop: '14px', width: '100%', height: '180px', borderRadius: '16px', overflow: 'hidden' }}>
+                                    <img 
+                                        // Si la foto empieza con 'http' o 'uploads' viene del backend real; 
+                                        // de lo contrario, puedes inyectar tu recurso simulado local del archivo images.ts
+                                        src={detalles_reportes.foto.startsWith('http') || detalles_reportes.foto.startsWith('uploads')
+                                            ? detalles_reportes.foto 
+                                            : IMAGES.basural1
+                                        } 
+                                        alt="Evidencia del reporte" 
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                                    />
+                                </div>
+                            ) : (
+                                /* Opcional: Mostrar una imagen por defecto elegante si el reporte no posee foto */
+                                <div style={{ marginTop: '14px', width: '100%', height: '60px', borderRadius: '16px', backgroundColor: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b', fontSize: '13px' }}>
+                                    <span>Reporte creado sin evidencia fotográfica</span>
+                                </div>
+                            )}
 
                             {/*Estado actual*/}
                             <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '14px' }}>

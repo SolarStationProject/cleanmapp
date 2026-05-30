@@ -31,3 +31,20 @@ export async function actualizarEstadoReporte(reporteId: string, nuevoEstado: st
     return await reportsRepository.updatedEstadoReportesId(reporteId, nuevoEstado);
 }
 
+// Definimos la interfaz del reporte que se va a crear
+/*
+interface CreateReportInput {
+    ciudadano_id: string;
+    descripcion?: string;
+    direccion: string;
+    comuna: string;
+    latitud: number;
+    longitud: number;
+    foto?: string; // Aquí viaja la ruta: 'uploads/reports/UUID/reporte-123.jpg'
+}
+
+export const createNewReport = async (reportData: CreateReportInput) => {
+    // Aquí podrías agregar reglas de negocio en el futuro si fuesen necesarias
+    return await reportsRepository.insertReport(reportData);
+};
+*/
