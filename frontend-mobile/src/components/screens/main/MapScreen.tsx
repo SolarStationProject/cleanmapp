@@ -1,73 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAxios } from '../../../hooks/useAxios';
+import { Reporte } from '../../../shared/types';
 import { ICONS } from "../../../assets/icons"
 import CitizenMapContainer from '../../../map/CitizenMapContainer';
-//import BottomSheet from '../../ui/BottomSheet';
 
 // Tipado local para controlar los estados de los filtros de la interfaz
 type FiltroEstado = 'Todos' | 'Pendiente' | 'En proceso' | 'Resuelto';
 
-/*
-interface ReporteCercano {
-    id: string;
-    titulo: string;
-    categoria: string;
-    distancia: string;
-    tiempo: string;
-    estado: 'Pendiente' | 'En proceso' | 'Resuelto';
+// Se define la estructura de la respuesta del backend
+interface BackendResponse {
+    success: boolean;
+    data: Reporte[];
 }
-*/
 
 export default function MapScreen() {
     const navigate = useNavigate();
     const [filtroSeleccionado, setFiltroSeleccionado] = useState<FiltroEstado>('Todos');
-    //const [reporteSeleccionado, setReporteSeleccionado] = useState<ReporteCercano | null>(null);
-    //const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(true);
     const [reporteSeleccionadoId, setReporteSeleccionadoId] = useState<string | null>(null);
+
+        // Definimos un parámetro de prueba (id)
+        const usuarioId = 'c2222222-2222-2222-2222-222222222222';
+        const usuarioRol = 'Ciudadano'
+
+        const { data: respuesta, error } = useAxios<BackendResponse>(
+            '/api/reports/', //endpoint
+            { usuarioId, usuarioRol } //parámetro
+        );
+    
+        const reportes = respuesta?.data; 
+    
+        // Renderizado de pantallas de carga y error del GET
+        //if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
+        if (error) return <p>Error al conectar con el servidor: {error}</p>;
 
     // Función limpia para cerrar o cancelar la selección del marcador
     const handleCerrarDetalle = () => {
         setReporteSeleccionadoId(null);
     };
-
-    // Datos mockeados alineados estrictamente con la interfaz gráfica provista
-    /*
-    const reportesMock: ReporteCercano[] = [
-        {
-            id: '02222222-2222-2222-2222-222222222222',
-            titulo: 'Escombros en vía pública',
-            categoria: 'Escombros',
-            distancia: '120m',
-            tiempo: 'Hace 2 horas',
-            estado: 'Pendiente'
-        },
-        {
-            id: '07777777-7777-7777-7777-777777777777',
-            titulo: 'Residuos electrónicos',
-            categoria: 'Electrónicos',
-            distancia: '350m',
-            tiempo: 'Hace 1 día',
-            estado: 'En proceso'
-        },
-        {
-            id: '01111111-1111-1111-1111-111111111111',
-            titulo: 'Basura acumulada',
-            categoria: 'Basura doméstica',
-            distancia: '500m',
-            tiempo: 'Hace 3 días',
-            estado: 'Pendiente'
-        }
-    ];
-    */
-
-    /*
-    const capturarSeleccionMarcador = (idReporte: string) => {
-        const encontrado = reportesMock.find(r => r.id === idReporte);
-        if (encontrado) {
-            setReporteSeleccionado(encontrado);
-        }
-    };
-    */
 
     return (
         <div style={styles.screenContainer}>
@@ -121,10 +91,13 @@ export default function MapScreen() {
 
             {/* 3. MAPA CONTENEDOR CORE */}
             <main style={styles.mapWrapper}>
-                <CitizenMapContainer 
-                    idReporteSeleccionado={reporteSeleccionadoId}
-                    onSelectMarker={(id) => setReporteSeleccionadoId(id)}
-                />
+                {reportes && reportes.length > 0 && (
+                    <CitizenMapContainer 
+                        idReporteSeleccionado={reporteSeleccionadoId}
+                        onSelectMarker={(id) => setReporteSeleccionadoId(id)}
+                        reportesData={reportes}
+                    />
+                )}
 
                 {/* BOTÓN ADICIONAL DE CANCELAR EN LA PANTALLA (OPCIONAL) */}
                 {reporteSeleccionadoId && (

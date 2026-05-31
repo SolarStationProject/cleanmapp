@@ -126,6 +126,7 @@ export async function obtenerTodos(usuarioId: string, usuarioRol: RolUsuario): P
             id,
             ciudadano_id,
             codigo,
+            titulo,
             descripcion,
             foto,
             fecha_creacion,

@@ -8,8 +8,8 @@ INSERT INTO usuarios (id, nombre, email, password, rol, fecha_registro)
 VALUES 
     ('a1111111-1111-1111-1111-111111111111', 'María García', 'admin@cleanmap.com', 'admin123', 'Admin', NOW()),
     ('a2222222-2222-2222-2222-222222222222', 'Carlos Méndez', 'admin2@cleanmap.com', 'admin234', 'Admin', NOW()),
-    ('c2222222-2222-2222-2222-222222222222', 'Elias Hernández', 'ciudadano@cleanmap.com', 'user123', 'Ciudadano', NOW()),
-    ('c3333333-3333-3333-3333-333333333333', 'Juan García', 'ciudadano2@cleanmap.com', 'user234', 'Ciudadano', NOW()),
+    ('c2222222-2222-2222-2222-222222222222', 'Juan García', 'ciudadano@cleanmap.com', 'user123', 'Ciudadano', NOW()),
+    ('c3333333-3333-3333-3333-333333333333', 'Elias Hernández', 'ciudadano2@cleanmap.com', 'user234', 'Ciudadano', NOW()),
     ('c4444444-4444-4444-4444-444444444444', 'Roberto Gomez', 'ciudadano3@cleanmap.com', 'user345', 'Ciudadano', NOW()),
     ('c5555555-5555-5555-5555-555555555555', 'Lautaro Sánchez', 'ciudadano4@cleanmap.com', 'user456', 'Ciudadano', NOW());
 

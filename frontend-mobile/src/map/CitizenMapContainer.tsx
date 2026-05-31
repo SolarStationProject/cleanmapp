@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom'; // ⚠️ HERRAMIENTA CLAVE
 import L from 'leaflet';
+import { Reporte } from '../shared/types';
 import { ICONS } from '../assets/icons';
+import { formatearHora } from '../utils/formatters';
 
 //@ts-ignore
 import 'leaflet/dist/leaflet.css';
@@ -9,6 +11,7 @@ import 'leaflet/dist/leaflet.css';
 interface CitizenMapContainerProps {
     onSelectMarker: (idReporte: string) => void;
     idReporteSeleccionado: string | null;
+    reportesData: Reporte[]
 }
 
 // Interfaz para vincular el nodo físico del DOM con los datos del punto
@@ -17,13 +20,19 @@ interface MarcadorPortal {
     contenedorElemento: HTMLDivElement;
 }
 
+/*
 const puntosMock = [
     { id: '02222222-2222-2222-2222-222222222222', lat: -33.4475, lng: -70.6680, estado: 'Pendiente', icono: '⚠️', titulo: 'Escombros en calle', distancia: '120m', tiempo: 'Hace 2h' },
     { id: '07777777-7777-7777-7777-777777777777', lat: -33.4500, lng: -70.6710, estado: 'En proceso', icono: '⚙️', titulo: 'Semáforo dañado', distancia: '450m', tiempo: 'Hace 1h' },
     { id: '01111111-1111-1111-1111-111111111111', lat: -33.4460, lng: -70.6725, estado: 'Pendiente', icono: '⚠️', titulo: 'Basural en vereda', distancia: '80m', tiempo: 'Hace 30m' }
 ];
+*/
 
-export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccionado }: CitizenMapContainerProps) {
+let puntosMock: Reporte[] = []; 
+
+export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccionado, reportesData }: CitizenMapContainerProps) {
+    puntosMock = reportesData
+    
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<L.Map | null>(null);
     
@@ -71,12 +80,12 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
                 iconAnchor: [0,0]
             });
 
-            const marker = L.marker([punto.lat, punto.lng], { icon: customIcon }).addTo(map);
+            const marker = L.marker([punto.latitud, punto.longitud], { icon: customIcon }).addTo(map);
 
             marker.on('click', () => {
                 // Usamos la referencia persistente para evitar re-crear el mapa
                 onSelectMarkerRef.current(punto.id);
-                map.panTo([punto.lat, punto.lng]); 
+                map.panTo([punto.latitud, punto.longitud]); 
             });
 
             return { punto, contenedorElemento: contenedorContenido };
@@ -98,7 +107,7 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
         
         const puntoActivo = puntosMock.find(p => p.id === idReporteSeleccionado);
         if (puntoActivo) {
-            mapInstanceRef.current.panTo([puntoActivo.lat, puntoActivo.lng]);
+            mapInstanceRef.current.panTo([puntoActivo.latitud, puntoActivo.longitud]);
         }
     }, [idReporteSeleccionado]);
 
@@ -125,15 +134,16 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
 
                                 <div style={styles.popupBody}>
                                     <div style={{ ...styles.iconBadge, backgroundColor: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF' }}>
-                                        { punto.estado === 'Rechazado' ? null : 
-                                        punto.estado === 'Pendiente' ? null :
-                                        punto.estado === 'Verificado' ? null : null
+                                        {punto.estado === 'Rechazado' ? <ICONS.RefusedMark /> : 
+                                        punto.estado === 'Pendiente' ? <ICONS.InfoMark /> :
+                                        punto.estado === 'Verificado' ? <ICONS.CheckMark /> : 
+                                        <ICONS.AlertTriangle />
                                         }
-                                        <ICONS.AlertTriangle/>
                                     </div>
                                     <div style={styles.popupTextContent}>
                                         <h3 style={styles.popupTitle}>{punto.titulo}</h3>
-                                        <p style={styles.popupMeta}><ICONS.MapPin/> {punto.distancia} <ICONS.Clock/> {punto.tiempo}</p>
+                                        {/*<p style={styles.popupMeta}><ICONS.MapPin/> {punto.distancia} <ICONS.Clock/> {punto.tiempo}</p>*/}
+                                        <p style={styles.popupMeta}><ICONS.Clock/> {formatearHora(punto.fecha_creacion)}</p>
                                     </div>
                                 </div>
 
@@ -166,7 +176,6 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
                             border: '2px solid #FFFFFF'
                         }}>
                             <div style={{ transform: 'rotate(45deg)', fontSize: '14px', color: 'white' }}>
-                                {punto.icono}
                             </div>
                         </div>
                     </div>,
@@ -198,7 +207,8 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
 
                             <div style={styles.itemMainInfo}>
                                 <h4 style={styles.itemTitle}>{item.titulo.substring(0, 15)}...</h4>
-                                <p style={styles.itemMeta}>📍 {item.distancia} • 🕒 {item.tiempo}</p>
+                                {/*<p style={styles.itemMeta}>📍 {item.distancia} • 🕒 {item.tiempo}</p>*/}
+                                <p style={styles.itemMeta}>🕒 {formatearHora(item.fecha_creacion)}</p>
                             </div>
 
                             <span style={{
