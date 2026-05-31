@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom'; // ⚠️ HERRAMIENTA CLAVE
 import L from 'leaflet';
 import { ICONS } from '../assets/icons';
@@ -11,17 +11,36 @@ interface CitizenMapContainerProps {
     idReporteSeleccionado: string | null;
 }
 
+// Interfaz para vincular el nodo físico del DOM con los datos del punto
+interface MarcadorPortal {
+    punto: typeof puntosMock[number];
+    contenedorElemento: HTMLDivElement;
+}
+
+const puntosMock = [
+    { id: '02222222-2222-2222-2222-222222222222', lat: -33.4475, lng: -70.6680, estado: 'Pendiente', icono: '⚠️', titulo: 'Escombros en calle', distancia: '120m', tiempo: 'Hace 2h' },
+    { id: '07777777-7777-7777-7777-777777777777', lat: -33.4500, lng: -70.6710, estado: 'En proceso', icono: '⚙️', titulo: 'Semáforo dañado', distancia: '450m', tiempo: 'Hace 1h' },
+    { id: '01111111-1111-1111-1111-111111111111', lat: -33.4460, lng: -70.6725, estado: 'Pendiente', icono: '⚠️', titulo: 'Basural en vereda', distancia: '80m', tiempo: 'Hace 30m' }
+];
+
 export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccionado }: CitizenMapContainerProps) {
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<L.Map | null>(null);
+    
+    // Estado para guardar las referencias de los portales
+    const [listaMarcadores, setListaMarcadores] = useState<MarcadorPortal[]>([]);
 
-    // ⚠️ ESTADO CLAVE: Guardamos los contenedores HTML físicos de Leaflet para inyectarles el TSX
-    const [portals, setPortals] = useState<React.ReactPortal[]>([]);
+    // Guardamos la función en un Ref para poder usarla dentro del efecto sin que actúe como dependencia
+    const onSelectMarkerRef = useRef(onSelectMarker);
+    useEffect(() => {
+        onSelectMarkerRef.current = onSelectMarker;
+    }, [onSelectMarker]);
 
     const defaultLat = -33.4489;
     const defaultLng = -70.6693;
 
-    useEffect(() => {
+    // ⚡ SOLUCIÓN DEFINITIVA: Dependencias vacías [] garantiza que el mapa se crea UNA sola vez y jamás se reconstruye
+    useLayoutEffect(() => {
         if (!mapContainerRef.current || mapInstanceRef.current) return;
 
         const map = L.map(mapContainerRef.current, {
@@ -42,48 +61,61 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
             }
         ).addTo(map);
 
-        const puntosMock = [
-            { id: '02222222-2222-2222-2222-222222222222', lat: -33.4475, lng: -70.6680, estado: 'Pendiente', icono: '⚠️', titulo: 'Escombros en calle', categoria: 'Escombros', distancia: '120m', tiempo: 'Hace 2h' },
-            { id: '07777777-7777-7777-7777-777777777777', lat: -33.4500, lng: -70.6710, estado: 'En proceso', icono: '⚙️', titulo: 'Semáforo dañado', categoria: 'Luminarias', distancia: '450m', tiempo: 'Hace 1h' },
-            { id: '01111111-1111-1111-1111-111111111111', lat: -33.4460, lng: -70.6725, estado: 'Pendiente', icono: '⚠️', titulo: 'Bache profundo', categoria: 'Pavimento', distancia: '80m', tiempo: 'Hace 30m' }
-        ];
-
-        // Guardaremos la lista de portales reactivos que crearemos para cada marcador
-        const nuevosPortales: React.ReactPortal[] = [];
-
-        puntosMock.forEach((punto) => {
-            // 1. Creamos un elemento <div> vacío en el DOM nativo
+        const marcadoresIniciales: MarcadorPortal[] = puntosMock.map((punto) => {
             const contenedorContenido = document.createElement('div');
 
-            // 2. Le pasamos este contenedor vacío a Leaflet
             const customIcon = L.divIcon({
-                html: contenedorContenido, // <-- Leaflet ahora renderizará un contenedor vacío controlado por nosotros
+                html: contenedorContenido,
                 className: 'marcador-portal-contenedor',
-                iconSize: [0, 0], // Evita desfases de tamaño heredados por Leaflet
-                iconAnchor: [0, 0]
+                iconSize: [0,0],
+                iconAnchor: [0,0]
             });
 
             const marker = L.marker([punto.lat, punto.lng], { icon: customIcon }).addTo(map);
 
             marker.on('click', () => {
-                onSelectMarker(punto.id);
-                map.panTo([punto.lat, punto.lng]);
+                // Usamos la referencia persistente para evitar re-crear el mapa
+                onSelectMarkerRef.current(punto.id);
+                map.panTo([punto.lat, punto.lng]); 
             });
 
-            // 3. ⚠️ EL TRUCO DE TELETRANSPORTE: Enganchamos tu TSX directo al contenedor de Leaflet
-            // Evaluamos si este punto específico es el que está seleccionado
-            const estaSeleccionado = punto.id === idReporteSeleccionado;
+            return { punto, contenedorElemento: contenedorContenido };
+        });
 
-            const portal = createPortal(
-                <div>
-                    {/* SI ESTÁ SELECCIONADO, INYECTAMOS TU COMPONENTE VISTA A EN TSX PURO */}
-                    {estaSeleccionado && (
-                        <div>
-                            {/* TU VISTA A: FUNCIONA AL 100% CON REACT (EVENTOS, ICONOS, ETC.) */}
+        setListaMarcadores(marcadoresIniciales);
+
+        return () => {
+            if (mapInstanceRef.current) {
+                mapInstanceRef.current.remove();
+                mapInstanceRef.current = null;
+            }
+        };
+    }, []); // 👈 Array vacío: Inmutable durante todo el ciclo de vida
+
+    // Reacciona al cambio de selección externa exclusivamente para desplazar la vista con panTo sin alterar el DOM
+    useEffect(() => {
+        if (!mapInstanceRef.current || !idReporteSeleccionado) return;
+        
+        const puntoActivo = puntosMock.find(p => p.id === idReporteSeleccionado);
+        if (puntoActivo) {
+            mapInstanceRef.current.panTo([puntoActivo.lat, puntoActivo.lng]);
+        }
+    }, [idReporteSeleccionado]);
+
+    return (
+        <div style={{ position: 'relative', width: '100%', height: '100%' , overflowY: 'auto'}}>
+            <div ref={mapContainerRef} style={{ width: '100%', height: '80%' }} />
+
+            {listaMarcadores.map(({ punto, contenedorElemento }) => {
+                const estaSeleccionado = punto.id === idReporteSeleccionado;
+
+                return createPortal(
+                    <div key={punto.id}>
+                        {estaSeleccionado && (
                             <div style={styles.detailPopupCard}>
                                 <div style={styles.popupHeaderRow}>
                                     <button style={styles.closePopupBtn} onClick={(e) => { 
-                                        e.stopPropagation(); // Evita activar el click del mapa
+                                        e.stopPropagation(); 
                                         onSelectMarker(''); 
                                     }}><ICONS.X/></button>
                                     <div style={styles.photoCountTag}>
@@ -93,11 +125,14 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
 
                                 <div style={styles.popupBody}>
                                     <div style={{ ...styles.iconBadge, backgroundColor: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF' }}>
+                                        { punto.estado === 'Rechazado' ? null : 
+                                        punto.estado === 'Pendiente' ? null :
+                                        punto.estado === 'Verificado' ? null : null
+                                        }
                                         <ICONS.AlertTriangle/>
                                     </div>
                                     <div style={styles.popupTextContent}>
                                         <h3 style={styles.popupTitle}>{punto.titulo}</h3>
-                                        <p style={styles.popupSubtitle}>{punto.categoria}</p>
                                         <p style={styles.popupMeta}><ICONS.MapPin/> {punto.distancia} <ICONS.Clock/> {punto.tiempo}</p>
                                     </div>
                                 </div>
@@ -106,7 +141,7 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
                                     <span style={{ 
                                         ...styles.statusTag, 
                                         backgroundColor: punto.estado === 'Pendiente' ? '#FFEBD4' : '#E6F0FF', 
-                                        color: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF' 
+                                        color: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF'
                                     }}>
                                         {punto.estado}
                                     </span>
@@ -115,59 +150,68 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
                                     </button>
                                 </div>
                             </div>
+                        )}
+
+                        <div style={{
+                            position: 'absolute',
+                            width: '32px',
+                            height: '32px',
+                            backgroundColor: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF',
+                            borderRadius: '50% 50% 50% 0',
+                            transform: 'translateX(-50%) translateY(-100%) rotate(-45deg)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            boxShadow: '0px 4px 6px rgba(0,0,0,0.25)',
+                            border: '2px solid #FFFFFF'
+                        }}>
+                            <div style={{ transform: 'rotate(45deg)', fontSize: '14px', color: 'white' }}>
+                                {punto.icono}
+                            </div>
                         </div>
-                    )}
+                    </div>,
+                    contenedorElemento
+                );
+            })}
+            {/* VISTA B: LISTA GENERAL DE REPORTES CERCANOS */}
+            <div style={styles.listContainer}>
+                <div style={styles.listHeader}>
+                    <h2 style={styles.listTitle}>Reportes cercanos</h2>
+                    {/* Usamos el largo dinámico de los puntos reales */}
+                    {/*<p style={styles.listSubtitle}>{puntosMock.length} reportes en tu zona</p>*/}
+                </div>
 
-                    {/* TU PIN INDICADOR EN TSX PURO (ABAJO DE LA TARJETA) */}
-                    <div style={{
-                        position: 'absolute',
-                        width: '32px',
-                        height: '32px',
-                        backgroundColor: punto.estado === 'Pendiente' ? '#FF9900' : '#0066FF',
-                        borderRadius: '50% 50% 50% 0',
-                        transform: 'translateX(-50%) translateY(-100%) rotate(-45deg)',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        boxShadow: '0px 4px 6px rgba(0,0,0,0.25)',
-                        border: '2px solid #FFFFFF'
-                    }}>
-                        <div style={{ transform: 'rotate(45deg)', fontSize: '14px', color: 'white' }}>
-                            {punto.icono}
+                <div style={styles.scrollableItemsContainer}>
+                    {/* Iteramos sobre listaMarcadores extrayendo directamente las propiedades del objeto 'punto' */}
+                    {listaMarcadores.map(({ punto: item }) => (
+                        <div 
+                            key={item.id} 
+                            style={styles.listItemCard} 
+                            onClick={() => onSelectMarker(item.id)} // ⚡ Sincroniza con el mapa abriendo la tarjeta y disparando panTo
+                        >
+                            <div style={{
+                                ...styles.iconBadge,
+                                backgroundColor: item.estado === 'Pendiente' ? '#FF9900' : '#0066FF'
+                            }}>
+                                {item.estado === 'Pendiente' ? '⚠️' : '⚙️'}
+                            </div>
+
+                            <div style={styles.itemMainInfo}>
+                                <h4 style={styles.itemTitle}>{item.titulo.substring(0, 15)}...</h4>
+                                <p style={styles.itemMeta}>📍 {item.distancia} • 🕒 {item.tiempo}</p>
+                            </div>
+
+                            <span style={{
+                                ...styles.statusTag,
+                                backgroundColor: item.estado === 'Pendiente' ? '#FFEBD4' : '#E6F0FF',
+                                color: item.estado === 'Pendiente' ? '#FF9900' : '#0066FF'
+                            }}>
+                                {item.estado}
+                            </span>
                         </div>
-                    </div>
-                </div>,
-                contenedorContenido // Destino físico en Leaflet
-            );
-
-            nuevosPortales.push(portal);
-        });
-
-        // Guardamos los portales en el estado de React para que los dibuje en la app
-        setPortals(nuevosPortales);
-
-        return () => {
-            if (mapInstanceRef.current) {
-                mapInstanceRef.current.remove();
-                mapInstanceRef.current = null;
-            }
-        };
-    }, [idReporteSeleccionado, onSelectMarker]); // Se reconstruyen los portales si cambia el seleccionado
-
-    const handleZoomIn = () => mapInstanceRef.current?.zoomIn();
-    const handleZoomOut = () => mapInstanceRef.current?.zoomOut();
-
-    return (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <div ref={mapContainerRef} style={{ width: '100%', height: '100%', position: 'absolute' }} />
-
-            <div style={styles.zoomControlWrapper}>
-                <button onClick={handleZoomIn} style={styles.zoomButton}>+</button>
-                <button onClick={handleZoomOut} style={{ ...styles.zoomButton, borderTop: '1px solid #EAEAEA' }}>-</button>
+                    ))}
+                </div>
             </div>
-
-            {/* ⚠️ RENDERIZAMOS LOS PORTALES: Aquí es donde React inyecta la magia dentro de Leaflet */}
-            {portals}
         </div>
     );
 }
@@ -178,6 +222,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         position: 'relative',
         width: '100%',
         height: '100%',
+        
     },
     absoluteCanvas: {
         position: 'absolute',
@@ -213,18 +258,13 @@ const styles: { [key: string]: React.CSSProperties } = {
         cursor: 'pointer',
         outline: 'none',
     },
-
-
-
-
-
     detailPopupCard: {
         position: 'absolute',
         bottom: '50%',
         left: '50%',
         transform: 'translateX(-50%)',
         marginBottom: '30px',
-        width: '300px',
+        width: '250px',
         backgroundColor: 'white', 
         borderRadius: '12px',
         boxShadow: '0px 2px 6px rgba(0,0,0,0.1)',
@@ -233,7 +273,6 @@ const styles: { [key: string]: React.CSSProperties } = {
         zIndex: 30,
         padding: '15px'
     },
-    
     popupHeaderRow: {
         marginTop: '-15px',
         marginLeft: '-15px',
@@ -274,7 +313,6 @@ const styles: { [key: string]: React.CSSProperties } = {
         color: '#111111',
         margin: '0 0 4px 0',
     },
-    popupSubtitle: {fontSize: '13px',color: '#666666',margin: '0 0 6px 0',},
     popupMeta: {
         fontSize: '12px',
         color: '#888888',
@@ -313,5 +351,62 @@ const styles: { [key: string]: React.CSSProperties } = {
         alignItems: 'center',
         fontSize: '16px',
         color: '#FFFFFF',
+    },
+    statusTag: {
+        padding: '4px 10px',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        textTransform: 'capitalize',
+    },
+    listContainer: {padding: '0 4px',},
+    listHeader: {marginBottom: '16px',},
+    //Aquí abajo cambiar
+    listTitle: {
+        fontSize: '12px',
+        fontWeight: '700',
+        color: '#64748b',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        margin: '15px 0 4px 4px'
+    },
+    listSubtitle: {
+        fontSize: '13px',
+        color: '#666666',
+        margin: 0,
+    },
+    scrollableItemsContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        maxHeight: '260px',
+        overflowY: 'auto',
+    },
+    listItemCard: {
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: '#F9F9F9',
+        borderRadius: '12px',
+        padding: '12px',
+        border: '1px solid #EAEAEA',
+        gap: '12px',
+        cursor: 'pointer',
+    },
+    itemMainInfo: {flex: 1,},
+    itemTitle: {
+        fontSize: '15px',
+        fontWeight: '600',
+        color: '#222222',
+        margin: '0 0 2px 0',
+    },
+    itemSubtitle: {
+        fontSize: '12px',
+        color: '#777777',
+        margin: '0 0 4px 0',
+    },
+    itemMeta: {
+        fontSize: '11px',
+        color: '#999999',
+        margin: 0,
     },
 };

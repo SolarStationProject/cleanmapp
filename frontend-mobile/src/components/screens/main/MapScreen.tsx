@@ -219,8 +219,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     mapWrapper: {
         flex: 1,
-        position: 'relative',
-        backgroundColor: '#E5E9F0',
+        position: 'relative'
     },
     legendFloatingBox: {
         position: 'absolute',
@@ -273,7 +272,7 @@ const styles: { [key: string]: React.CSSProperties } = {
         borderTop: '8px solid #555555',
         position: 'relative',
     },
-    listContainer: {padding: '0 4px',},
+    listContainer: {padding: '15px',},
     listHeader: {marginBottom: '16px',},
     listTitle: {
         fontSize: '18px',

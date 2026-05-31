@@ -176,7 +176,7 @@ VALUES
 
     -- Línea de tiempo para el Reporte 7 ('Rechazado')
     (gen_random_uuid(), '07777777-7777-7777-7777-777777777777', 'c4444444-4444-4444-4444-444444444444', NOW() - INTERVAL '5 days', 'Pendiente', 'Reporte creado.'),
-    (gen_random_uuid(), '03333333-3333-3333-3333-333333333333', 'a2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '4 days', 'Rechazado', 'Reporte invalidado. Ya ha sido reportado por otro usuario.'),
+    (gen_random_uuid(), '07777777-7777-7777-7777-777777777777', 'a2222222-2222-2222-2222-222222222222', NOW() - INTERVAL '4 days', 'Rechazado', 'Reporte invalidado. Ya ha sido reportado por otro usuario.'),
 
     -- Línea de tiempo para el Reporte 8 ('Verificado')
     (gen_random_uuid(), '08888888-8888-8888-8888-888888888888', 'c4444444-4444-4444-4444-444444444444', NOW() - INTERVAL '3 days', 'Pendiente', 'Reporte creado.'),
@@ -195,7 +195,7 @@ VALUES
 INSERT INTO comentarios_internos (id, reporte_id, admin_id, comentario, fecha_creacion)
 VALUES 
     (gen_random_uuid(),'01111111-1111-1111-1111-111111111111','a1111111-1111-1111-1111-111111111111','Ojo: Este cuadrante presenta reincidencia semanal. Reportar a fiscalización si vuelve a ocurrir.', NOW() - INTERVAL '1 day'),
-    (gen_random_uuid(),'02222222-2222-2222-2222-222222222222','a1111111-1111-1111-1111-111111111111','Revisando cámaras de seguridad del sector para identificar la patente del camión que dejó los escombros. Dejar en pendiente hasta tener la patente para cursar la multa.',NOW() - INTERVAL '18 hours'),
-    (gen_random_uuid(),'03333333-3333-3333-3333-333333333333','a1111111-1111-1111-1111-111111111111','Se rechaza el reporte porque la ubicación exacta corresponde a un recinto privado (fábrica fuera de servicio). Se notificó formalmente al dueño del recinto para que limpie su fachada.',NOW() - INTERVAL '4 days'),
-    (gen_random_uuid(),'04444444-4444-4444-4444-444444444444','a1111111-1111-1111-1111-111111111111','El equipo de aseo vecinal ya retiró las bolsas rotas. Se sugiere enviar patrullaje de seguridad comunitaria para fiscalizar a los vecinos que sacan la basura fuera de horario.',NOW() - INTERVAL '5 days'),
-    (gen_random_uuid(),'05555555-5555-5555-5555-555555555555','a1111111-1111-1111-1111-111111111111','Reporte duplicado. Los colchones ya habían sido reportados en el caso #REP-2026-0032 por el inspector de zona. Se cierra este hilo para evitar duplicidad de cuadrillas.',NOW() - INTERVAL '10 hours');
+    (gen_random_uuid(),'03333333-3333-3333-3333-333333333333','a2222222-2222-2222-2222-222222222222','Revisando cámaras de seguridad del sector para identificar la patente del camión que dejó los escombros. Dejar en pendiente hasta tener la patente para cursar la multa.',NOW() - INTERVAL '18 hours'),
+    (gen_random_uuid(),'06666666-6666-6666-6666-666666666666','a1111111-1111-1111-1111-111111111111','Se rechaza el reporte porque la ubicación exacta corresponde a un recinto privado (fábrica fuera de servicio). Se notificó formalmente al dueño del recinto para que limpie su fachada.',NOW() - INTERVAL '4 days'),
+    (gen_random_uuid(),'07777777-7777-7777-7777-777777777777','a2222222-2222-2222-2222-222222222222','El equipo de aseo vecinal ya retiró las bolsas rotas. Se sugiere enviar patrullaje de seguridad comunitaria para fiscalizar a los vecinos que sacan la basura fuera de horario.',NOW() - INTERVAL '5 days'),
+    (gen_random_uuid(),'08888888-8888-8888-8888-888888888888','a1111111-1111-1111-1111-111111111111','Reporte duplicado. Los colchones ya habían sido reportados en el caso #REP-2026-0032 por el inspector de zona. Se cierra este hilo para evitar duplicidad de cuadrillas.',NOW() - INTERVAL '10 hours');
