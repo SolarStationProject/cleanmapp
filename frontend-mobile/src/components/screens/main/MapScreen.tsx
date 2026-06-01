@@ -111,15 +111,10 @@ export default function MapScreen() {
 
                 {/* Leyenda flotante superior izquierda dentro del mapa */}
                 <div style={styles.legendFloatingBox}>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#FF9900' }} /> Pendiente</div>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#0066FF' }} /> En proceso</div>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#00CC66' }} /> Resuelto</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#FF9900' }} /> Rechazado</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#0066FF' }} /> Pendiente</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#00CC66' }} /> Verificado</div>
                 </div>
-
-                {/* Botón de filtro avanzado flotante derecho */}
-                <button style={styles.floatingFilterBtn}>
-                    <div style={styles.funnelIconGeom} />
-                </button>
             </main>
         </div>
     );
@@ -197,8 +192,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     legendFloatingBox: {
         position: 'absolute',
-        top: '16px',
-        left: '16px',
+        top: '5px',
+        left: '5px',
         backgroundColor: 'rgba(255, 255, 255, 0.95)',
         padding: '10px 14px',
         borderRadius: '8px',

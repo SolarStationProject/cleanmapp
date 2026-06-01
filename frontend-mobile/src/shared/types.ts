@@ -50,6 +50,7 @@ export interface ComentarioInterno {
     id: string;
     reporte_id: string;
     admin_id: string;
+    admin_nombre?: string;
     comentario: string;
     fecha_creacion: string;
 }

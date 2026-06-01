@@ -236,7 +236,7 @@ export default function ReportDetail() {
                                 color: '#64748b',
                                 textTransform: 'uppercase',
                                 letterSpacing: '0.05em',
-                                margin: '0 0 12px 4px'
+                                margin: '0 0 20px 4px'
                             }}>
                                 Historial de cambios
                             </p>
@@ -315,27 +315,16 @@ export default function ReportDetail() {
                                 })}
                             </div>
                         </div>
-
-                        {/* Tarjeta Inferior de Alertas de Notificación */}
                         <div style={{
-                            backgroundColor: '#f1f5f9',
+                            //backgroundColor: '#f1f5f9',
                             borderRadius: '20px',
                             padding: '14px 16px',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '12px',
-                            border: '1px solid #e2e8f0',
+                            //border: '1px solid #e2e8f0',
                             marginBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))'
                         }}>
-                            <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                                <ICONS.BellOutline />
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <p style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>Notificaciones activas</p>
-                                <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0', lineHeight: '1.3' }}>
-                                    Recibirás alertas cuando cambie el estado
-                                </p>
-                            </div>
                         </div>
                     </>
                 )}

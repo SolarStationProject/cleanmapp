@@ -52,6 +52,7 @@ export interface ComentarioInterno {
     id: string;          // UUID
     reporte_id: string;  // Relación con reportes.id
     admin_id: string;    // Relación con usuarios.id (Solo usuarios con rol 'Admin')
+    admin_nombre?: string;
     comentario: string;  // TEXT
     fecha_creacion: string; // ISO String
 }

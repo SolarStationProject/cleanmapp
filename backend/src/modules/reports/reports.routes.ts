@@ -18,13 +18,13 @@ router.get('/:id', getDetalleReporte); // /api/reports/:id
 
 router.get('/', obtenerReportes);
 
-// Insertar un nuevo hito/comentario en la línea de tiempo
+// Insertar un nuevo hito/comentario en la línea de tiempo (no ha sido usada aún)
 router.post('/:id/history', crearCambioHistorial); // /api/reports/:id/history
 
 // 'foto' es el nombre del campo que enviará el frontend (React)
 //router.post('/crear', upload.single('foto'), reportsController.createReport);
 
-// Actualizar de forma directa el estado en la tabla del reporte
+// Actualizar de forma directa el estado en la tabla del reporte (no ha sido usada aún)
 router.put('/:id/status', actualizarEstadoReporte); // /api/reports/:id/status
 
 export default router;

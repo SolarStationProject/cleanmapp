@@ -31,31 +31,11 @@ export default function HomePage() {
     
     const menuItems = [
         {
-            id: "new-report",
-            icon: ICONS.Plus,
-            label: "Nuevo Reporte",
-            description: "Reportar vertedero ilegal",
-            accent: true,
-        },
-        {
-            id: "my-reports",
-            icon: ICONS.FileText,
-            label: "Mis Reportes",
-            description: "Ver estado de tus reportes",
-            badge: 3,
-        },
-        {
             id: "map",
             icon: ICONS.MapPin,
             label: "Mapa de Reportes",
             description: "Explorar reportes cercanos",
-        },
-        {
-            id: "notifications",
-            icon: ICONS.Bell,
-            label: "Notificaciones",
-            description: "Alertas y actualizaciones",
-        },
+        }
     ];
 
     return (
@@ -141,7 +121,7 @@ export default function HomePage() {
                     border: '1px solid rgba(16,185,129,0.1)'
                 }}>
                     <p style={{ fontSize: '16px', color: 'lab(98.84% .0000298023 -.0000119209)', opacity: 0.7, fontWeight: '400', margin: 0 }}>Bienvenido,</p>
-                    <p style={{ fontSize: '20px', fontWeight: '700', color: '#ffffff', marginTop: '2px', margin: 0 }}>Juan García</p>
+                    <p style={{ fontSize: '20px', fontWeight: '700', color: '#ffffff', marginTop: '2px', margin: 0 }}>Carlos Méndez</p>
                 </div>
             </div>
 
@@ -180,9 +160,9 @@ export default function HomePage() {
                             textAlign: 'left',
                             minHeight: '72px',
                             cursor: 'pointer',
-                            backgroundColor: item.accent ? '#005c2e' : '#e7ede8',
-                            color: item.accent ? '#ffffff' : '#1e293b',
-                            boxShadow: item.accent ? '0 4px 6px -1px rgba(0,92,46,0.1)' : 'none'
+                            backgroundColor: '#e7ede8',
+                            color: '#1e293b',
+                            boxShadow: 'none'
                         }}
                     >
                         {/* Contenedor del Icono Redondeado */}
@@ -194,9 +174,9 @@ export default function HomePage() {
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0,
-                            backgroundColor: item.accent ? 'lab(44 -35.92 17)' : '#d0e0d6',
-                            color: item.accent ? '#d0e0d6' : '#005c2e',
-                            border: item.accent ? 'none' : '1px solid #f1f5f9'
+                            backgroundColor: '#d0e0d6',
+                            color: '#005c2e',
+                            border: '1px solid #f1f5f9'
                         }}>
                             <item.icon />
                         </div>
@@ -206,7 +186,7 @@ export default function HomePage() {
                             <p style={{
                                 fontSize: '16px',
                                 fontWeight: '700',
-                                color: item.accent ? '#ffffff' : '#1e293b',
+                                color: '#1e293b',
                                 margin: 0
                             }}>
                                 {item.label}
@@ -218,105 +198,16 @@ export default function HomePage() {
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
-                                color: item.accent ? '#a7f3d0' : '#94a3b8'
+                                color: '#94a3b8'
                             }}>
                                 {item.description}
                             </p>
                         </div>
 
-                        {/* Globo de números de Notificaciones / Badges */}
-                        {item.badge && (
-                            <span style={{
-                                width: '20px',
-                                height: '20px',
-                                borderRadius: '50%',
-                                fontSize: '15px',
-                                fontWeight: '700',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                backgroundColor: item.accent ? '#ffffff' : '#005c2e',
-                                color: item.accent ? '#005c2e' : '#ffffff'
-                            }}>
-                                {item.badge}
-                            </span>
-                        )}
-
                         {/* Flecha derecha */}
                         <ICONS.ChevronRight />
                     </button>
                 ))}
-
-                {/* Sección de Actividad Reciente */}
-                <div style={{ paddingTop: '8px', paddingBottom: '64px' }}>
-                    <p style={{
-                        fontSize: '12px',
-                        fontWeight: '700',
-                        color: '#64748b',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        margin: '0 0 12px 4px'
-                    }}>
-                        Actividad reciente
-                    </p>
-                    <div style={{
-                        backgroundColor: '#ffffff',
-                        border: '1px solid #f1f5f9',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
-                        borderRadius: '24px',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '16px'
-                    }}>
-                        {/* Evento En Proceso */}
-                        <div style={{ display: 'flex', alignItems: 'start', gap: '12px' }}>
-                            <div style={{
-                                width: '32px',
-                                height: '32px',
-                                borderRadius: '50%',
-                                backgroundColor: '#f0f9ff',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                border: '1px solid #e0f2fe',
-                                color: '#0284c7'
-                            }}>
-                                <ICONS.Clock />
-                            </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <p style={{ fontSize: '16px', fontWeight: '700', color: '#334155', margin: 0 }}>Reporte #2847 actualizado</p>
-                                <p style={{ fontSize: '14px', color: '#64748b', marginTop: '2px', margin: 0 }}>Estado: <span style={{ color: '#0284c7', fontWeight: '600' }}>En proceso</span></p>
-                                <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px', margin: 0 }}>Hace 2 horas</p>
-                            </div>
-                        </div>
-                        
-                        {/* Evento Resuelto */}
-                        <div style={{ display: 'flex', alignItems: 'start', gap: '12px', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
-                            <div style={{
-                                width: '32px',
-                                height: '32px',
-                                borderRadius: '50%',
-                                backgroundColor: '#ecfdf5',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0,
-                                border: '1px solid #d1fae5',
-                                color: '#10b981'
-                            }}>
-                                <ICONS.FileText />
-                            </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <p style={{ fontSize: '16px', fontWeight: '700', color: '#334155', margin: 0 }}>Reporte #2801 resuelto</p>
-                                <p style={{ fontSize: '14px', color: '#64748b', marginTop: '2px', margin: 0 }}>Limpieza completada con éxito</p>
-                                <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px', margin: 0 }}>Ayer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );

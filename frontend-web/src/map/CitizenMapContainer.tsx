@@ -33,7 +33,7 @@ let puntosMock: Reporte[] = [];
 
 export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccionado, reportesData }: CitizenMapContainerProps) {
     const navigate = useNavigate();
-    const rol = 'Ciudadano'
+    const rol = 'Admin'
     puntosMock = reportesData
     
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -219,7 +219,7 @@ export default function CitizenMapContainer({ onSelectMarker, idReporteSeleccion
             {/* VISTA B: LISTA GENERAL DE REPORTES CERCANOS */}
             <div style={styles.listContainer}>
                 <div style={styles.listHeader}>
-                    <h2 style={styles.listTitle}>Reportes cercanos</h2>
+                    <h2 style={styles.listTitle}>Reportes</h2>
                     {/* Usamos el largo dinámico de los puntos reales */}
                     {/*<p style={styles.listSubtitle}>{puntosMock.length} reportes en tu zona</p>*/}
                 </div>

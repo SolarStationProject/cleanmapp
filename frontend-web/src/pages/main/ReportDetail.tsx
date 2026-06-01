@@ -25,6 +25,7 @@ export default function ReportDetail() {
     );
 
     const detalles_reportes = respuesta?.data; 
+    console.log('Valor de tal: ', detalles_reportes)
 
     // Renderizado de pantallas de carga y error del GET
     //if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
@@ -105,7 +106,9 @@ export default function ReportDetail() {
                 overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '20px'
+                gap: '20px',
+                marginLeft: '500px',
+                marginRight: '500px'
             }}>
 
                 {loading? (
@@ -150,7 +153,7 @@ export default function ReportDetail() {
 
                             {/*Foto*/}
                             {detalles_reportes?.foto ? (
-                                <div style={{ marginTop: '14px', width: '100%', height: '180px', borderRadius: '16px', overflow: 'hidden' }}>
+                                <div style={{ marginTop: '14px', width: '100%', height: '500px', borderRadius: '16px', overflow: 'hidden' }}>
                                     <img 
                                         // Si la foto empieza con 'http' o 'uploads' viene del backend real; 
                                         // de lo contrario, puedes inyectar tu recurso simulado local del archivo images.ts
@@ -160,7 +163,7 @@ export default function ReportDetail() {
                                         } 
                                         alt="Evidencia del reporte"
                                         crossOrigin="anonymous"
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                                        style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block' }} 
                                     />
                                 </div>
                             ) : (
@@ -235,7 +238,7 @@ export default function ReportDetail() {
                                 color: '#64748b',
                                 textTransform: 'uppercase',
                                 letterSpacing: '0.05em',
-                                margin: '0 0 12px 4px'
+                                margin: '0 0 20px 4px'
                             }}>
                                 Historial de cambios
                             </p>
@@ -315,25 +318,67 @@ export default function ReportDetail() {
                             </div>
                         </div>
 
-                        {/* Tarjeta Inferior de Alertas de Notificación */}
-                        <div style={{
-                            backgroundColor: '#f1f5f9',
-                            borderRadius: '20px',
-                            padding: '14px 16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            border: '1px solid #e2e8f0',
-                            marginBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))'
-                        }}>
-                            <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-                                <ICONS.BellOutline />
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <p style={{ fontSize: '13px', fontWeight: '700', color: '#1e293b', margin: 0 }}>Notificaciones activas</p>
-                                <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0', lineHeight: '1.3' }}>
-                                    Recibirás alertas cuando cambie el estado
-                                </p>
+                        {/* Sección de comentarios internos*/}
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <p style={{
+                                fontSize: '12px',
+                                fontWeight: '700',
+                                color: '#64748b',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.05em',
+                                margin: '10px 0 15px 4px'
+                            }}>
+                                Comentarios
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                                <div style={{ 
+                                        borderBottom: '1px solid #000000', 
+                                        paddingTop: '15px', 
+                                        paddingBottom: '5px', 
+                                        gap: '10px', 
+                                        display: 'flex',
+                                        marginBottom: '30px' 
+                                    }}>
+                                    <ICONS.User/>
+                                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#64748b' }}>
+                                        Agrega algún comentario...
+                                    </span>
+                                </div>
+ 
+
+                                {detalles_reportes?.comentarios_internos?.map((event, index) => {
+                                    const isLast2 = index === detalles_reportes.historial_cambios.length - 1;
+
+                                    return (
+                                        <div key={event.id} style={{ display: 'flex', gap: '14px', position: 'relative' }}>
+                                            {/* Contenido de la Tarjeta del Evento */}
+                                            <div style={{ flex: 1, paddingBottom: isLast2 ? '0px' : '24px' }}>                                               
+                                              {/* Fila del Estado y la Fecha */}
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                                    {/* Operador responsable y hora */}
+                                                    {event.admin_nombre && (
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
+                                                            <ICONS.User/>
+                                                            <span style={{ fontSize: '14px', fontWeight: '600' }}>
+                                                                {event.admin_nombre}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                    {/* Fecha con formato estándar */}
+                                                    <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>
+                                                        {formatearFecha(event.fecha_creacion)}
+                                                    </span>
+                                                </div>
+
+                                                {/* Comentarios de administradores */}
+                                                <p style={{ fontSize: '16px', fontWeight: '400', color: '#334155', margin: '0 0 5px 0', lineHeight: '1.3' }}>
+                                                    {event.comentario}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </>

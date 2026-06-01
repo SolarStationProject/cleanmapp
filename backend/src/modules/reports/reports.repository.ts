@@ -48,6 +48,7 @@ export async function findDetailsByReporteId(reporteId: string): Promise<Detalle
             ST_Y(r.geom) as latitud,
             ST_X(r.geom) as longitud,
             
+            -- 1. Historial de cambios
             COALESCE(
                 (
                     SELECT json_agg(json_build_object(
@@ -64,7 +65,25 @@ export async function findDetailsByReporteId(reporteId: string): Promise<Detalle
                     WHERE v.reporte_id = r.id
                 ), 
                 '[]'::json
-            ) as historial_cambios
+            ) as historial_cambios,
+
+            -- 2. CORREGIDO: Comentarios internos con nombre del Admin asignado
+            COALESCE(
+                (
+                    SELECT json_agg(json_build_object(
+                        'id', c.id,
+                        'reporte_id', c.reporte_id,
+                        'admin_id', c.admin_id,
+                        'admin_nombre', adm.nombre,
+                        'comentario', c.comentario,
+                        'fecha_creacion', c.fecha_creacion::text
+                    ) ORDER BY c.fecha_creacion DESC)
+                    FROM comentarios_internos c
+                    LEFT JOIN usuarios adm ON c.admin_id = adm.id
+                    WHERE c.reporte_id = r.id
+                ),
+                '[]'::json
+            ) as comentarios_internos
         FROM reportes r
         WHERE r.id = $1;
     `;
@@ -145,57 +164,3 @@ export async function obtenerTodos(usuarioId: string, usuarioRol: RolUsuario): P
     const result = await db.query(queryText, [usuarioId, usuarioRol]);
     return result.rows;
 }
-
-/*
-interface InsertReportParams {
-    ciudadano_id: string;
-    descripcion?: string;
-    direccion: string;
-    comuna: string;
-    latitud: number;
-    longitud: number;
-    foto?: string;
-}
-
-export const insertReport = async (data: InsertReportParams) => {
-    // Generamos un código corto aleatorio para el reporte (ej: REP-7492)
-    const codigoGenerado = `REP-${Math.floor(1000 + Math.random() * 9000)}`;
-
-    const query = `
-    INSERT INTO reportes (
-      id, 
-      ciudadano_id, 
-      codigo, 
-      descripcion, 
-      direccion, 
-      comuna, 
-      latitud, 
-      longitud, 
-      foto, 
-      estado, 
-      fecha_creacion
-    ) 
-    VALUES (
-      gen_random_uuid(), -- Genera el UUID en PostgreSQL
-      $1, $2, $3, $4, $5, $6, $7, $8, 
-      'Pendiente',        -- Todo reporte inicia en 'Pendiente'
-      NOW()               -- Timestamp actual
-    )
-    RETURNING *; -- Nos devuelve el reporte recién creado con su ID e información completa
-  `;
-
-    const values = [
-        data.ciudadano_id,
-        codigoGenerado,
-        data.descripcion || null,
-        data.direccion,
-        data.comuna,
-        data.latitud,
-        data.longitud,
-        data.foto || null // Si no subió foto, se guarda como NULL en PostgreSQL
-    ];
-
-    const result = await pool.query(query, values);
-    return result.rows[0]; // Retorna el registro creado
-};
-*/

@@ -20,8 +20,8 @@ export default function MapPage() {
     const [reporteSeleccionadoId, setReporteSeleccionadoId] = useState<string | null>(null);
 
         // Definimos un parámetro de prueba (id)
-        const usuarioId = 'c2222222-2222-2222-2222-222222222222';
-        const usuarioRol = 'Ciudadano'
+        const usuarioId = 'a2222222-2222-2222-2222-222222222222';
+        const usuarioRol = 'Admin'
 
         const { data: respuesta, error } = useAxios<BackendResponse>(
             '/api/reports/', //endpoint
@@ -111,9 +111,9 @@ export default function MapPage() {
 
                 {/* Leyenda flotante superior izquierda dentro del mapa */}
                 <div style={styles.legendFloatingBox}>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#FF9900' }} /> Pendiente</div>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#0066FF' }} /> En proceso</div>
-                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#00CC66' }} /> Resuelto</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#FF9900' }} /> Rechazado</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#0066FF' }} /> Pendiente</div>
+                    <div style={styles.legendItem}><span style={{ ...styles.legendDot, backgroundColor: '#00CC66' }} /> Verificado</div>
                 </div>
 
                 {/* Botón de filtro avanzado flotante derecho */}

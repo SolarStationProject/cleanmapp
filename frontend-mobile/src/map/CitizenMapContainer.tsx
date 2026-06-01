@@ -293,8 +293,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     },
     zoomControlWrapper: {
         position: 'absolute',
-        bottom: '200px',
-        right: '20px',
+        bottom: 115,
+        right: 5,
         backgroundColor: '#FFFFFF',
         borderRadius: '8px',
         display: 'flex',
