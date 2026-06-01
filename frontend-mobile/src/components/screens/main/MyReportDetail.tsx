@@ -13,7 +13,7 @@ interface BackendResponse {
     data: DetalleReporteResponse | null;
 }
 
-export default function ReportDetail() {
+export default function MyReportDetail() {
     const navigate = useNavigate();
     // Invocamos el hook useLocation
     const location = useLocation();
@@ -65,7 +65,7 @@ export default function ReportDetail() {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
                     <button 
-                        onClick={() => navigate('/map')}
+                        onClick={() => navigate('/my-reports')}
                         style={{
                             background: 'none',
                             border: 'none',

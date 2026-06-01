@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAxios } from '../../../hooks/useAxios';
-import { Reporte } from '../../../shared/types';
-import { ICONS } from "../../../assets/icons"
-import CitizenMapContainer from '../../../map/CitizenMapContainer';
+import { useAxios } from '../../hooks/useAxios';
+import { Reporte } from '../../shared/types';
+import { ICONS } from "../../assets/icons"
+import CitizenMapContainer from '../../map/CitizenMapContainer';
 
 // Tipado local para controlar los estados de los filtros de la interfaz
 type FiltroEstado = 'Todos' | 'Pendiente' | 'En proceso' | 'Resuelto';
@@ -14,7 +14,7 @@ interface BackendResponse {
     data: Reporte[];
 }
 
-export default function MapScreen() {
+export default function MapPage() {
     const navigate = useNavigate();
     const [filtroSeleccionado, setFiltroSeleccionado] = useState<FiltroEstado>('Todos');
     const [reporteSeleccionadoId, setReporteSeleccionadoId] = useState<string | null>(null);

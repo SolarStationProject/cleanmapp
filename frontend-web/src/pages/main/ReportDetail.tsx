@@ -1,11 +1,10 @@
-import { useAxios } from '../../../hooks/useAxios';
-import { API_URL } from '../../../services/api'
+import { useAxios } from '../../hooks/useAxios';
+import { API_URL } from '../../services/api'
 import { useNavigate, useLocation } from "react-router-dom";
-import { ICONS } from "../../../assets/icons";
-import { IMAGES } from "../../../assets/images"; 
-import { DetalleReporteResponse } from '../../../shared/types';
-import { formatearFecha, formatearHora } from '../../../utils/formatters';
-import TabBar from "../../ui/TabBar";
+import { ICONS } from "../../assets/icons";
+import { IMAGES } from "../../assets/images"; 
+import { DetalleReporteResponse } from '../../shared/types';
+import { formatearFecha, formatearHora } from '../../utils/formatters';
 
 // Se define la estructura de la respuesta del backend
 interface BackendResponse {
@@ -339,10 +338,7 @@ export default function ReportDetail() {
                         </div>
                     </>
                 )}
-            </div> {/* Fin del contenedor de Scroll */}
-            {/* Barra de Navegación Fija anclada abajo */}
-            <TabBar currentTab={'report-detail'} />
-
+            </div>
         </div>
     );
 }

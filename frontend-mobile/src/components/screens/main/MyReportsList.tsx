@@ -27,10 +27,10 @@ export default function MyReportsList() {
     //if (loading) return <p>Cargando tus reportes geolocalizados...</p>;
     if (error) return <p>Error al conectar con el servidor: {error}</p>;
 
-    const handleMyReport = (reportId: string, rol: string) => {
+    const handleMyReport = (reportId: string, rol: string, fecha: string) => {
         // Viajamos a la siguiente pantalla metiendo los datos en el 'state'
         navigate('/report-detail', { 
-            state: [reportId, rol]
+            state: [reportId, rol, fecha]
         });
     };
 
@@ -166,7 +166,7 @@ export default function MyReportsList() {
                             return (
                                 <div 
                                     key={r.id}
-                                    onClick={() => handleMyReport(r.id, r.rol)} //navigate("/report-detail")
+                                    onClick={() => handleMyReport(r.id, r.rol, r.fecha_creacion)} //navigate("/report-detail")
                                     style={{
                                         backgroundColor: '#ffffff',
                                         borderRadius: '24px',
@@ -210,7 +210,7 @@ export default function MyReportsList() {
                                             lineHeight: '1.3',
                                             maxWidth: '85%'
                                         }}>
-                                            {r.descripcion}
+                                            {r.titulo}
                                         </h3>
                                         <ICONS.ChevronRight />
                                     </div>

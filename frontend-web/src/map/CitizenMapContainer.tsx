@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal } from 'react-dom'; // HERRAMIENTA CLAVE
 import L from 'leaflet';
 import { Reporte } from '../shared/types';
 import { ICONS } from '../assets/icons';
