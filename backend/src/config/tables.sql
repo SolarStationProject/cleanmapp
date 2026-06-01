@@ -1,6 +1,6 @@
 -- 1. Habilitar extensiones necesarias para PostGIS y generación de UUIDs
 CREATE EXTENSION IF NOT EXISTS postgis;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Si tu versión es muy antigua, usa pgcrypto
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 2. Limpieza de tablas antiguas para evitar conflictos (en orden de dependencia)
 DROP TABLE IF EXISTS comentarios_internos CASCADE;
